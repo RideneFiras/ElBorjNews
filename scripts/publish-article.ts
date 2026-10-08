@@ -8,6 +8,7 @@
 //   pnpm publish:article check <spec.json>     # validate + render, write nothing
 //   pnpm publish:article fidelity <spec.json> <source.txt>  # word-by-word diff vs the original text
 //   pnpm publish:article publish <spec.json>   # upload images, insert the article (once; remembered in article.json)
+//   pnpm publish:article update <spec.json>    # rewrite an already saved article from its edited spec (re-uploads pictures)
 //   pnpm publish:article events <spec.json>    # add the spec's calendar dates to an already saved article
 //   pnpm publish:article status <spec.json> published | draft | scheduled YYYY-MM-DDTHH:MM   # change it afterwards
 //
@@ -451,6 +452,59 @@ async function setStatus(file: string, status: string, when?: string) {
   await refreshSite();
 }
 
+/** Rewrites an already saved article from its edited spec: text, metadata, links and pictures
+ *  (pictures are uploaded again). Keeps the status, dates and calendar entries; adds a revision. */
+async function update(file: string) {
+  const spec = readSpec(file);
+  const saved = savedFile(file);
+  if (!existsSync(saved)) fail(`not saved on the site yet (no ${saved}): run publish first`);
+  const art = JSON.parse(readFileSync(saved, 'utf8')) as { id: string; public_id: number; language: string };
+  if (spec.new_tags.length) fail('update does not create tags: add them in the admin, then list their slugs in "tags"');
+  const client = db();
+  const r = await resolveSpec(client, spec);
+
+  const uploads = new Map<string, Uploaded>();
+  let cover: Uploaded | null = null;
+  if (spec.cover) {
+    cover = await uploadImage(client, spec.cover, spec.language, r.actingId);
+    console.log(`  + cover ${cover.storage_path}`);
+  }
+  for (const img of bodyImages(spec)) {
+    if (uploads.has(img.file)) continue;
+    const u = await uploadImage(client, img, spec.language, r.actingId);
+    uploads.set(img.file, u);
+    console.log(`  + image ${u.storage_path}`);
+  }
+
+  const doc = toDoc(spec.body, uploads);
+  const body_html = sanitizeArticleHtml(renderDoc(doc, { mediaUrl, locale: spec.language }));
+  const { data: row, error } = await client.from('articles').update({
+    title: spec.title, subtitle: spec.subtitle ?? null, kicker_override: spec.kicker_override ?? null, location: spec.location ?? null,
+    body_json: doc, body_html, body_text: docToText(doc), excerpt: spec.excerpt ?? null,
+    category_id: r.category.id, format_id: r.format?.id ?? null, byline_override: spec.unsigned ? null : spec.byline_override ?? null,
+    cover_media_id: cover?.id ?? null, cover_caption: spec.cover?.caption ?? null, cover_credit: spec.cover?.credit ?? null, cover_alt: spec.cover?.alt ?? null,
+    last_edited_by: r.actingId,
+  }).eq('id', art.id).select('status').single();
+  if (error || !row) fail(`article update failed: ${error?.message}`);
+
+  // Replace the link tables with what the spec says now.
+  for (const t of ['article_authors', 'article_tags', 'article_categories'] as const) {
+    const del = await client.from(t).delete().eq('article_id', art.id);
+    if (del.error) fail(`${t} reset failed: ${del.error.message}. Fix it in the admin.`);
+  }
+  const joins = await Promise.all([
+    r.authorRows.length ? client.from('article_authors').insert(r.authorRows.map((a, position) => ({ article_id: art.id, profile_id: a!.id, position }))) : null,
+    r.tagIds.length ? client.from('article_tags').insert(r.tagIds.map((tag_id) => ({ article_id: art.id, tag_id }))) : null,
+    r.extra.length ? client.from('article_categories').insert(r.extra.map((category_id) => ({ article_id: art.id, category_id }))) : null,
+    client.from('article_revisions').insert({ article_id: art.id, title: spec.title, subtitle: spec.subtitle ?? null, body_json: doc, edited_by: r.actingId }),
+  ]);
+  for (const j of joins) if (j?.error) fail(`article updated but a link table failed: ${j.error.message}. Fix it in the admin.`);
+
+  console.log(`\n✓ updated (${row.status})`);
+  console.log(`  admin:  ${SITE_URL}/${art.language}/admin/articles/${art.id}`);
+  if (row.status !== 'draft') await refreshSite();
+}
+
 /** Adds the spec's `events` to the calendar for an article already saved (skips ones already there). */
 async function addEvents(file: string) {
   const spec = readSpec(file);
@@ -527,5 +581,5 @@ function fidelity(file: string, sourceFile: string) {
 
 const [cmd, file, extra, extra2] = process.argv.slice(2);
 if (cmd === 'fidelity') fidelity(file!, extra!);
-const run = cmd === 'fidelity' ? Promise.resolve() : cmd === 'options' ? options() : cmd === 'check' ? check(file!) : cmd === 'publish' ? publish(file!) : cmd === 'status' ? setStatus(file!, extra ?? '', extra2) : cmd === 'events' ? addEvents(file!) : fail('usage: publish-article.ts options | check <spec.json> | fidelity <spec.json> <source.txt> | publish <spec.json> | status <spec.json> published|draft|scheduled [YYYY-MM-DDTHH:MM]');
+const run = cmd === 'fidelity' ? Promise.resolve() : cmd === 'options' ? options() : cmd === 'check' ? check(file!) : cmd === 'publish' ? publish(file!) : cmd === 'status' ? setStatus(file!, extra ?? '', extra2) : cmd === 'events' ? addEvents(file!) : cmd === 'update' ? update(file!) : fail('usage: publish-article.ts options | check <spec.json> | fidelity <spec.json> <source.txt> | publish <spec.json> | update <spec.json> | status <spec.json> published|draft|scheduled [YYYY-MM-DDTHH:MM]');
 run.catch((e) => fail(e instanceof Error ? e.message : String(e)));

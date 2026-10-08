@@ -140,9 +140,13 @@ If there is no title, ask for one. Don't invent it.
    `/{lang}/article/{id}`; give it to Firas. The script refreshes the site's cached pages
    (`PROD_REVALIDATE_SECRET` in `.env.local`), so it shows on the homepage at once; without the
    secret it takes up to 5 minutes. Firas can also press publish in the admin himself.
-9. If the text or metadata must change after saving, do it in the admin (link printed), or ask
-   before changing the database directly (see `supabase/MODULE.md`). Never run `publish` again for
-   a saved post (it refuses when `article.json` exists).
+9. If the text, metadata or pictures must change after saving (Firas asks for it): edit the
+   spec, run `check` and `fidelity` again, then `pnpm -s publish:article update posts/<n>/spec.json`.
+   It rewrites the saved article (text, metadata, tags, sections, pictures re-uploaded) and keeps
+   its status and calendar entries. Firas can also edit in the admin (link printed). Never run
+   `publish` again for a saved post (it refuses when `article.json` exists).
+   Text taken from someone else's page ends with «نقلا عن صفحة …» linked to the source (a
+   correction listed in `corrections`), not with their bare name as if they wrote it for us.
 
 ## Spec format (`spec.json`)
 
