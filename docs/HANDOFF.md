@@ -81,6 +81,7 @@ session continuing the work._
 - Database: section colours set, the 6 Arabic articles saved as `fr` are `ar`, `legal_masthead.email` = contact@borj.tn (footer and contact page).
 - Wrangler's OAuth login can expire: `pnpm run deploy` then waits for a browser sign-in and fails with "Timed out waiting for authorization code". Run `npx wrangler login` first.
 - Phone fix (same day, version `24bf34a1`): the ☰ menu was unreadable (white text inherited from the navy band); now ink on paper with section colours, search and big rows. Small tap targets enlarged. `private.app_config.revalidate_url` is now `https://borj.tn/api/revalidate`; Firas set the Supabase Auth URLs.
+- Default share picture set (Réglages → «Image de partage par défaut», `design/facebook/share-2026.png`): the homepage had no `og:image`, so Facebook used the lead article's photo.
 - Facebook kit for the new look: `design/facebook/*-2026.*` (profile, cover, announcement poster; `node design/facebook/render-2026.mjs [phone]`).
 
 ## Next 5 concrete steps (for whoever continues)
