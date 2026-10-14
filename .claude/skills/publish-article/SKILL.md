@@ -62,6 +62,9 @@ Firas in the summary (step 7): he approves the fixes together with the rest.
 1. **A folder** `posts/<n>/` (git-ignored) with `post.txt` and pictures. Convention used so far:
    - line 1: the section (e.g. `ثقافة`),
    - next line(s) until the first blank line: the title (it can span 2 lines; join them with a space),
+     a lone genre word on line 2 (`بورتريه`, `حوار`, `خبر`…) is the genre (`format`), not the title;
+     leave it out of `source.txt` too,
+   - the last line may be a signature («إعداد مراد ريدان»): see Byline below,
    - then the body.
    Anything missing (genre, tags, subtitle, cover choice…) you fill in.
 2. **Text pasted in the chat** plus picture paths (drag a file into the terminal to get its
@@ -85,9 +88,16 @@ If there is no title, ask for one. Don't invent it.
      `interview`, رأي `opinion`, نتائج `results` for scores… pick from the list.
    - `tags`: existing place/club/event tags clearly mentioned (e.g. `nabeul`). Propose new tags
      (`new_tags`) only for clearly important names, and only with Firas's OK.
-   - Byline: **`"unsigned": true` by default for now** (Firas asked for no names on the site
-     until the legal questions are settled): no «بقلم» line, no author box. Use `authors` (profile
-     slugs) or `byline_override` (e.g. «مراسلنا بنابل») only when Firas asks for a signature.
+   - Byline (since 2026-10-14): **if the text ends with a signature line** («إعداد مراد ريدان»,
+     «بقلم …»), that person is the author. Put the exact line in `"signature"` (it is left out of
+     the body; `fidelity` strips it from the end of the source) and set the byline:
+     - an existing profile (see AUTHORS in `options`) whose name matches → `"authors": ["<slug>"]`;
+     - none → `"byline_override": "<the name only>"` (the page prints «بقلم <name>»), and tell
+       Firas no profile exists yet: he can create one in the admin (Utilisateurs → inviter) so the
+       article gets an author box and page, then you switch the spec to `authors` and run `update`.
+     **No signature line → `"unsigned": true`** (no «بقلم» line, no author box), unless Firas
+     asks for a signature (`authors`, or `byline_override` e.g. «مراسلنا بنابل»).
+     Copy the name as written in the text (don't "correct" its spelling).
    - `location` (dateline, printed as «قليبية — » before the first paragraph): only if the text
      *starts* with one ("X — …"); then remove it from the first paragraph and set `location`.
      Otherwise leave it empty (the site would print words that aren't in the text).

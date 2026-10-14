@@ -87,6 +87,10 @@ const Spec = z.object({
   byline_override: z.string().trim().max(200).nullish(),
   /** No author name at all (same as «بدون توقيع» in the editor). */
   unsigned: z.boolean().default(false),
+  /** The author's signature line at the end of the source (e.g. «إعداد مراد ريدان»). It becomes the
+   *  byline (`authors` or `byline_override`), so it is left out of the body; `fidelity` removes it
+   *  from the source before comparing. */
+  signature: z.string().trim().min(1).nullish(),
   cover: Image.nullish(),
   excerpt: z.string().trim().max(400).nullish(),
   is_breaking: z.boolean().default(false),
@@ -554,6 +558,11 @@ function fidelity(file: string, sourceFile: string) {
   const spec = readSpec(file);
   if (!sourceFile || !existsSync(sourceFile)) fail(`source text not found: ${sourceFile}`);
   let source = readFileSync(sourceFile, 'utf8');
+  if (spec.signature) {
+    const at = source.lastIndexOf(spec.signature);
+    if (at < 0 || source.slice(at + spec.signature.length).trim()) fail(`signature not found at the end of the source: «${spec.signature}»`);
+    source = source.slice(0, at);
+  }
   for (const c of spec.corrections) {
     if (!source.includes(c.from)) fail(`correction not found in the source: «${c.from}»`);
     source = source.split(c.from).join(c.to);
@@ -571,6 +580,7 @@ function fidelity(file: string, sourceFile: string) {
   while (i < n) missing.push(`${a[i++]}  (word ${i})`);
   while (j < m) added.push(b[j++]!);
   console.log(`original: ${n} words · article: ${m} words · identical in order: ${L[0]![0]}`);
+  if (spec.signature) console.log(`signature line moved to the byline (not in the body): «${spec.signature}» → byline ${spec.unsigned ? '(unsigned!)' : spec.authors.length ? spec.authors.join(', ') : `«${spec.byline_override ?? ''}»`}`);
   for (const c of spec.corrections) console.log(`typo fixed by Claude (needs approval): «${c.from}» → «${c.to}»${c.why ? `  (${c.why})` : ''}`);
   for (const f of spec.generated) console.log(`written by Claude (not part of the comparison, needs approval): ${f}${f === 'captions' ? ' (picture captions)' : ` = «${spec[f] ?? ''}»`}`);
   if (!missing.length && !added.length) { console.log(`✓ the article contains the original text word for word${spec.corrections.length ? ` (after the ${spec.corrections.length} typo fixes above)` : ''}`); return; }
