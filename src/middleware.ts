@@ -7,13 +7,31 @@ const intl = createIntlMiddleware(routing);
 
 const PUBLIC_ADMIN_PATHS = /^\/(ar|fr)\/admin\/(login|forgot|reset)(\/|$)/;
 
+// The one public address (DECISIONS.md → Domain). www.borj.tn and the old workers.dev address
+// redirect here; API routes are not matched, so callbacks and trackers keep working on any host.
+const CANONICAL_HOST = 'borj.tn';
+const OLD_HOSTS = new Set(['www.borj.tn', 'www.elborj.workers.dev']);
+
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // "/" → the reader's last language (cookie), Arabic by default.
-  if (pathname === '/') {
-    const preferred = request.cookies.get('NEXT_LOCALE')?.value === 'fr' ? 'fr' : 'ar';
-    return NextResponse.redirect(new URL(`/${preferred}`, request.url), 307);
+  const host = request.headers.get('host')?.toLowerCase();
+  if (host && OLD_HOSTS.has(host)) {
+    const url = new URL(`${pathname}${request.nextUrl.search}`, `https://${CANONICAL_HOST}`);
+    return NextResponse.redirect(url, 301);
+  }
+
+  // The newspaper is Arabic only and the admin French only (DECISIONS.md → Languages).
+  if (pathname === '/') return NextResponse.redirect(new URL('/ar', request.url), 307);
+  if (/^\/ar\/admin(\/|$)/.test(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.replace(/^\/ar/, '/fr');
+    return NextResponse.redirect(url, 308);
+  }
+  if (/^\/fr(\/|$)/.test(pathname) && !/^\/fr\/admin(\/|$)/.test(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.replace(/^\/fr/, '/ar');
+    return NextResponse.redirect(url, 308);
   }
 
   // No trailing slashes (SEO doc).

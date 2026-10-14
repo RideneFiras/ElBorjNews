@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: Promise<{ locale: 'ar' 
   const p = await params;
   await requireStaff(p.locale, ['editor', 'admin']);
   const t = await getTranslations({ locale: p.locale, namespace: 'admin.pages' });
-  let initial: PageData = { id: null, language: p.locale, title: '', slug: '', body_json: null, page_kind: 'standard', show_in_footer: false, status: 'draft', seo_title: '', seo_description: '', translation_group_id: null };
+  let initial: PageData = { id: null, language: 'ar', title: '', slug: '', body_json: null, page_kind: 'standard', show_in_footer: false, status: 'draft', seo_title: '', seo_description: '', translation_group_id: null };
   if (!/^[0-9a-f-]{36}$/.test(p.id)) notFound();
   const db = await sessionClient();
   const { data } = await db.from('pages').select('*').eq('id', p.id).maybeSingle();

@@ -20,7 +20,7 @@ export async function loginAction(_: unknown, form: FormData): Promise<{ error?:
     await db.auth.signOut();
     return { error: 'inactive' };
   }
-  const next = parsed.data.next && /^\/(ar|fr)\/admin(\/|$)/.test(parsed.data.next) ? parsed.data.next : `/${p.ui_locale ?? parsed.data.locale}/admin`;
+  const next = parsed.data.next && /^\/(ar|fr)\/admin(\/|$)/.test(parsed.data.next) ? parsed.data.next : '/fr/admin';
   redirect(next);
 }
 
@@ -34,11 +34,10 @@ export async function forgotAction(_: unknown, form: FormData): Promise<{ sent?:
   return { sent: true }; // same answer whether or not the address exists
 }
 
-export async function logoutAction(form: FormData) {
-  const locale = form.get('locale') === 'fr' ? 'fr' : 'ar';
+export async function logoutAction() {
   const db = await sessionClient();
   await db.auth.signOut();
-  redirect(`/${locale}/admin/login`);
+  redirect('/fr/admin/login');
 }
 
 /** Sets a new password after an e-mail link. Invites put the session tokens in the URL

@@ -41,8 +41,9 @@ export default async function ArticlePage({ params }: Params) {
   if (!a) notFound();
 
   const translations = a.translation_group_id ? await getArticleTranslations(a.translation_group_id) : [];
-  // An article lives under the locale of its language (or its translation's).
-  if (a.language !== locale) {
+  // The public site is Arabic only (/fr redirects to /ar in the middleware), so every article
+  // is shown under /ar. Other locales still send an article to its own language.
+  if (a.language !== locale && locale !== 'ar') {
     const tr = translations.find((t) => t.language === locale);
     permanentRedirect(articleHref(tr ?? a));
   }

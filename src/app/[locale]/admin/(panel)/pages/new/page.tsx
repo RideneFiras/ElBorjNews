@@ -6,7 +6,7 @@ export default async function Page({ params }: { params: Promise<{ locale: 'ar' 
   const p = await params;
   await requireStaff(p.locale, ['editor', 'admin']);
   const t = await getTranslations({ locale: p.locale, namespace: 'admin.pages' });
-  const initial: PageData = { id: null, language: p.locale, title: '', slug: '', body_json: null, page_kind: 'standard', show_in_footer: false, status: 'draft', seo_title: '', seo_description: '', translation_group_id: null };
+  const initial: PageData = { id: null, language: 'ar', title: '', slug: '', body_json: null, page_kind: 'standard', show_in_footer: false, status: 'draft', seo_title: '', seo_description: '', translation_group_id: null };
 
   return (
     <div>

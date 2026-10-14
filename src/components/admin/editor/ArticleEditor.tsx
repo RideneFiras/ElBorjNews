@@ -1,6 +1,5 @@
 'use client';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -9,7 +8,7 @@ import type { PMNode } from '@/lib/content/render';
 import { firstParagraph } from '@/lib/content/render';
 import type { AdminMedia } from '@/lib/admin/media';
 import { updateMedia } from '@/lib/admin/media';
-import { copyArticle, createTag, deleteDraft, getRevision, listRevisions, saveArticle, type Intent, type SaveResult } from '@/lib/admin/articles';
+import { createTag, deleteDraft, getRevision, listRevisions, saveArticle, type Intent, type SaveResult } from '@/lib/admin/articles';
 import { FacebookIcon, WhatsappIcon } from '@/components/shared/icons';
 import { Dialog } from '../Dialog';
 import { FocalPicker } from '../FocalPicker';
@@ -334,18 +333,6 @@ export function ArticleEditor({ initial, options, role, userId, locale }: { init
         </div>
       </details>
 
-      <div className="border-t border-rule pt-4">
-        <p className="a-label">{t('translation')}</p>
-        {options.translations.length ? (
-          <ul className="text-[14px]">{options.translations.map((x) => <li key={x.id}><Link prefetch={false} className="underline" href={`/${locale}/admin/articles/${x.id}`} lang={x.language}>{x.language.toUpperCase()} · {x.title}</Link> <span className="text-ink-3">({ts(x.status as 'draft')})</span></li>)}</ul>
-        ) : <p className="a-help">{t('noTranslation')}</p>}
-        {a.id && !options.translations.some((x) => x.language !== a.language) && (
-          <button type="button" className="a-btn a-btn-sm mt-2" onClick={async () => {
-            const r = await copyArticle(a.id!, 'translate');
-            if (r.ok) router.push(`/${locale}/admin/articles/${r.data!.id}`);
-          }}>{t('createTranslation')}</button>
-        )}
-      </div>
     </div>
   );
 
@@ -380,15 +367,6 @@ export function ArticleEditor({ initial, options, role, userId, locale }: { init
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="min-w-0 space-y-4">
-          <div className="flex flex-wrap items-center gap-4" role="radiogroup" aria-label={t('language')}>
-            <span className="a-label mb-0">{t('language')}</span>
-            {(['ar', 'fr'] as const).map((l) => (
-              <label key={l} className="flex items-center gap-1.5">
-                <input type="radio" name="language" checked={a.language === l} disabled={readOnly} onChange={() => set('language', l)} />
-                {l === 'ar' ? tc('arabic') : tc('french')}
-              </label>
-            ))}
-          </div>
           <div dir={a.language === 'fr' ? 'ltr' : 'rtl'} lang={a.language} className="space-y-4">
             <Field id="kicker" label={t('kicker')} help={t('kickerHelp')}>
               <input id="kicker" className="a-input max-w-xs" value={a.kicker_override} disabled={readOnly} onChange={(e) => set('kicker_override', e.target.value)} />

@@ -38,7 +38,7 @@ function loadEnv(file: string) {
 loadEnv(join(process.cwd(), '.env.local'));
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
-const SITE_URL = 'https://www.elborj.workers.dev';
+const SITE_URL = 'https://borj.tn';
 
 const mediaUrl = (p: string) => `${SUPABASE_URL}/storage/v1/object/public/media/${p.split('/').map(encodeURIComponent).join('/')}`;
 

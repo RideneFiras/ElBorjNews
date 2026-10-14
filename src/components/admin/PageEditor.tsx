@@ -33,8 +33,6 @@ export function PageEditor({ initial, locale }: { initial: PageData; locale: str
         <RichText value={p.body_json} language={p.language} placeholder={te('bodyPlaceholder')} onChange={(d) => set('body_json', d)} />
       </div>
       <aside className="a-panel h-fit space-y-4 p-4">
-        <div><label className="a-label" htmlFor="p-lang">{tc('language')}</label>
-          <select id="p-lang" className="a-select" value={p.language} onChange={(e) => set('language', e.target.value as 'ar')}><option value="ar">{tc('arabic')}</option><option value="fr">{tc('french')}</option></select></div>
         <div><label className="a-label" htmlFor="p-slug">{tc('slug')}</label><input id="p-slug" className="a-input" dir="ltr" value={p.slug} onChange={(e) => set('slug', e.target.value)} /><p className="a-help">{tc('slugHelp')}</p></div>
         <div><label className="a-label" htmlFor="p-kind">{t('kind')}</label>
           <select id="p-kind" className="a-select" value={p.page_kind} onChange={(e) => set('page_kind', e.target.value as PageData['page_kind'])}>{KINDS.map((k) => <option key={k} value={k}>{t(`kind_${k}`)}</option>)}</select></div>

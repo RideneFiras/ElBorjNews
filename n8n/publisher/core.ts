@@ -12,7 +12,7 @@ import { startChat } from './llm';
 
 const REPO = resolve(process.env.REPO_DIR ?? process.cwd());
 const DATA = resolve(process.env.DATA_DIR ?? '/data');
-const SITE_URL = 'https://www.elborj.workers.dev';
+const SITE_URL = 'https://borj.tn';
 const MAX_ATTEMPTS = 3;
 
 export type Json = Record<string, unknown>;

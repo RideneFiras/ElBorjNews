@@ -51,7 +51,7 @@ export async function loadEditor(staff: Staff, locale: 'ar' | 'fr', id: string |
     };
   } else {
     article = {
-      id: null, public_id: null, status: 'draft', language: locale, kicker_override: '', title: '', subtitle: '', body_json: null, location: '',
+      id: null, public_id: null, status: 'draft', language: 'ar', kicker_override: '', title: '', subtitle: '', body_json: null, location: '',
       category_id: firstTop?.id ?? '', extra_category_ids: [], format_id: '', tag_ids: [], author_ids: [staff.id], byline_override: '', unsigned: false,
       cover_media_id: null, cover: null, cover_caption: '', cover_credit: '', cover_alt: '', excerpt: '', is_featured: false, is_breaking: false,
       breaking_hours: settings.breaking.default_hours, is_sponsored: false, sponsor_name: '', allow_ads: true, seo_title: '', seo_description: '',

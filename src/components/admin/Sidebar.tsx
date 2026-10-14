@@ -44,7 +44,6 @@ export function Sidebar({ locale, role, name, reviewCount, unreadMessages }: { l
     if (i.key === 'review') return false;
     return i.exact ? pathname === path : pathname === path || pathname.startsWith(`${path}/`);
   };
-  const other = locale === 'ar' ? 'fr' : 'ar';
   const nav = (
     <nav className="a-nav flex flex-col py-2" aria-label={t('menu')}>
       {visible.map((i) => (
@@ -57,11 +56,9 @@ export function Sidebar({ locale, role, name, reviewCount, unreadMessages }: { l
       <div className="mt-4 border-t border-rule px-4 pt-3 text-[14px]">
         <p className="mb-2 text-ink-3">{name}</p>
         <p className="flex flex-wrap gap-x-4 gap-y-1">
-          <a href={`/${locale}`} target="_blank" rel="noopener" className="underline">{t('viewSite')}</a>
-          <a href={pathname.replace(/^\/(ar|fr)/, `/${other}`)} className="underline" lang={other}>{other === 'fr' ? 'Français' : 'العربية'}</a>
+          <a href="/ar" target="_blank" rel="noopener" className="underline">{t('viewSite')}</a>
         </p>
         <form action={logoutAction} className="mt-3">
-          <input type="hidden" name="locale" value={locale} />
           <button type="submit" className="a-btn a-btn-sm">{t('logout')}</button>
         </form>
       </div>

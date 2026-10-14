@@ -45,8 +45,6 @@ export function ProfileForm({ initial, self }: { initial: ProfileData; self: boo
           ))}
         </div>
         <label className="flex items-center gap-2"><input type="checkbox" checked={p.show_public_page} onChange={(e) => setP({ ...p, show_public_page: e.target.checked })} />{t('showPage')}</label>
-        <div><label className="a-label" htmlFor="p-ui">{t('uiLocale')}</label>
-          <select id="p-ui" className="a-select w-auto" value={p.ui_locale} onChange={(e) => setP({ ...p, ui_locale: e.target.value as 'ar' })}><option value="ar">العربية</option><option value="fr">Français</option></select></div>
         <button type="submit" className="a-btn a-btn-primary">{tc('save')}</button>
         {msg && <p role="status" className="text-[14px]">{msg}</p>}
       </form>

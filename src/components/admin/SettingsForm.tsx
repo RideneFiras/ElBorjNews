@@ -98,9 +98,6 @@ export function SettingsForm({ initial, media }: { initial: V; media: Record<str
       </Section>
 
       <Section title={t('content')}>
-        {check('public_languages', 'fr', t('frPublic'))}
-        {check('content_mixing', 'fr_include_arabic_content', t('mixFr'))}
-        {check('content_mixing', 'ar_include_french_content', t('mixAr'))}
         {check('breaking', 'enabled', t('breakingEnabled'))}
         {num('breaking', 'default_hours', t('breakingHours'), 1, 72)}
         <h3 className="a-label pt-2">{t('inArticleAds')}</h3>

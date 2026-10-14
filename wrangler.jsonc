@@ -35,7 +35,7 @@
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["DOQueueHandler"] }],
   "vars": {
     // Public, non-secret values. Secrets: see docs/DEPLOY.md (wrangler secret put).
-    "SITE_URL": "https://www.elborj.workers.dev",
+    "SITE_URL": "https://borj.tn",
     // Background page refresh (Durable Object queue): a rebuild of the homepage can take more than
     // the 10 s default, and every failed attempt is retried with a full re-render (6 by default),
     // which multiplied CPU use on the Free plan (error 1102, 2026-10-03). Allow 30 s, retry once.

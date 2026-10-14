@@ -8,7 +8,6 @@ import { articleHref, pageHref, sectionHref } from '@/lib/public/links';
 import { categoryName } from '@/lib/public/labels';
 import { SearchIcon } from '@/components/shared/icons';
 import { BreakingBar } from './BreakingBar';
-import { LangSwitch } from './LangSwitch';
 import { MobileMenu } from './MobileMenu';
 import { Nameplate } from './Nameplate';
 import { NavScroll } from './NavScroll';
@@ -32,8 +31,6 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
   const hijri = settings.show_hijri_date.enabled ? formatHijri(now, locale, settings.show_hijri_date.offset_days) : '';
   const earEnd = locale === 'fr' ? settings.masthead_ears.end_fr : settings.masthead_ears.end_ar;
   const tagline = pick(settings.tagline, locale);
-  // The French interface can be hidden from readers (Settings); the admin stays bilingual.
-  const frPublic = settings.public_languages?.fr !== false || locale === 'fr';
 
   const searchForm = (
     <form action={`/${locale}/search`} method="get" role="search" className="container-page flex gap-2 py-3">
@@ -55,7 +52,6 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
             {hijri && <span> · <span lang="ar">{hijri}</span></span>}
           </p>
           <div className="flex items-center gap-4">
-            {frPublic && <LangSwitch locale={locale} />}
             <details className="group">
               <summary className="flex cursor-pointer list-none items-center gap-1 hover:text-accent" aria-label={t('search')}>
                 <SearchIcon size={18} />
@@ -75,8 +71,6 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
       <div className="container-page">
         <div className="flex h-14 items-center justify-between lg:hidden">
           <MobileMenu
-            locale={locale}
-            showLang={frPublic}
             labels={{ menu: t('menu'), close: t('close'), sections: t('sections'), pages: t('pages') }}
             sections={top.map((c) => ({
               href: sectionHref(locale, c.slug),

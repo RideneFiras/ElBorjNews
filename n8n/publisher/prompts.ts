@@ -104,19 +104,19 @@ Only the final post text, ready to publish. No explanations, no alternatives, no
 Article: international volleyball player Ahmed Kadhi gives the African Cup to his first coach in Kélibia.
 22 سنة بين أوّل تمرين في قليبية والتاج الإفريقي… وجملة واحدة لم ينسها أحمد القاضي طوال هذه السنوات.
 ماذا قال له مدرّبه وهو طفل؟ على موقع البرج:
-https://www.elborj.workers.dev/ar/article/42
+https://borj.tn/ar/article/42
 #قليبية #الكرة_الطائرة #جريدة_البرج
 
 Article: the national amateur music festival of Menzel Temime returns after years of absence; selection committee meets.
 غاب عن منزل تميم منذ 2016… ويعود هذا الخريف.
 المهرجان الوطني لموسيقى الهواة يستعدّ لدورته 28: الموعد وأين وصلت الاستعدادات، على موقع البرج:
-https://www.elborj.workers.dev/ar/article/43
+https://borj.tn/ar/article/43
 #منزل_تميم #نابل #جريدة_البرج
 
 Article: protest today in Menzel Bouzelfa against a black soldier fly factory project.
 منزل بوزلفة: وقفة احتجاجية اليوم ضدّ مشروع مصنع «الذباب الأسود».
 لماذا يرفضه الأهالي والمنظمات؟ التفاصيل على موقع البرج:
-https://www.elborj.workers.dev/ar/article/40
+https://borj.tn/ar/article/40
 #منزل_بوزلفة #نابل #جريدة_البرج
 
 ### Bad (don't do this)
