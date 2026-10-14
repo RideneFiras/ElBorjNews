@@ -7,7 +7,7 @@ ads and a live media kit. Built (phases 0–5) and **live** at https://borj.tn (
 not technical: everything editorial must stay doable from the admin.
 
 Stack: Next.js 16 (App Router, webpack build) + next-intl 4 + Tailwind 4, deployed on
-**Cloudflare Workers Free** with OpenNext; **Supabase Free** (Postgres, Auth, Storage).
+**Cloudflare Workers Paid** ($5/month since 2026-10-03) with OpenNext; **Supabase Free** (Postgres, Auth, Storage).
 
 ## Read first
 
