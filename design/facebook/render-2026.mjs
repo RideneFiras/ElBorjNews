@@ -14,7 +14,7 @@ if (process.argv.includes('phone')) {
   await ctx.close();
 }
 
-for (const [name, w, h] of [['profile-2026', 1080, 1080], ['cover-2026', 1640, 624], ['announce-2026', 1080, 1350]]) {
+for (const [name, w, h] of [['profile-2026', 1080, 1080], ['cover-2026', 1640, 624], ['announce-2026', 1080, 1350], ['share-2026', 1200, 630]]) {
   const p = await b.newPage({ viewport: { width: w, height: h } });
   await p.goto(`file://${dir}${name}.html?still`, { waitUntil: 'networkidle' });
   await p.evaluate(() => document.fonts.ready);
