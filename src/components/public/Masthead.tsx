@@ -140,7 +140,7 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
               );
             })}
             <li>
-              <Link prefetch={false} href={`/${locale}/agenda`} data-section="agenda" style={{ '--sec': 'var(--accent)' } as CSSProperties} className="nav-link inline-flex min-h-12 items-center border-b-[3px] border-transparent px-3 font-ui text-[17px] font-bold">
+              <Link prefetch={false} href={`/${locale}/agenda`} data-section="agenda" style={{ '--sec': 'var(--brand)' } as CSSProperties} className="nav-link inline-flex min-h-12 items-center border-b-[3px] border-transparent px-3 font-ui text-[17px] font-bold">
                 {tg('title')}
               </Link>
             </li>

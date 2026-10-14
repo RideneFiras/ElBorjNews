@@ -12,6 +12,8 @@
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
   --color-accent-dark: var(--accent-dark);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
   --color-bar: var(--bar);
   --color-bar-ink: var(--bar-ink);
   --color-footer: var(--footer);
@@ -117,10 +119,10 @@
     align-items: flex-end;
     justify-content: space-between;
     gap: 16px;
-    border-bottom: 3px solid var(--sec, var(--accent));
+    border-bottom: 3px solid var(--sec, var(--brand));
   }
   .section-head .section-title {
-    background: var(--sec, var(--accent));
+    background: var(--sec, var(--brand));
     color: #fff;
     padding: 6px 14px 4px;
   }
@@ -132,7 +134,7 @@
     font-family: var(--font-ui);
     font-weight: 700;
     font-size: 15px;
-    color: var(--sec, var(--accent));
+    color: var(--sec, var(--brand));
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -175,7 +177,7 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    background: var(--accent);
+    background: var(--brand);
     color: var(--accent-ink);
     font-family: var(--font-headline);
     font-weight: 700;
@@ -598,12 +600,12 @@
     outline-color: var(--bar-ink);
   }
   .masthead-utility {
-    background: var(--accent-dark);
+    background: var(--brand-dark);
   }
   .masthead-ear-label {
     display: inline-block;
     background: var(--bar-ink);
-    color: var(--accent);
+    color: var(--brand);
     font-family: var(--font-ui);
     font-weight: 700;
     font-size: 14px;
@@ -633,7 +635,7 @@
   }
   .masthead-nav .nav-link[aria-current='page'] {
     color: var(--bar-ink);
-    background: var(--sec, var(--accent));
+    background: var(--sec, var(--brand));
   }
   .site-footer a:hover {
     color: var(--footer-ink);

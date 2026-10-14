@@ -16,7 +16,11 @@
   --accent: #b3121b; /* press red, 6.6:1 on paper, 7.0:1 under white text */
   --accent-dark: #8a0e15;
   --accent-ink: #ffffff;
-  --bar: var(--accent); /* section nav bar */
+  /* House colour: masthead band, and the headers/number/date blocks that belong to no section.
+     Red is kept for breaking news and the وطنية section only. */
+  --brand: #163a5f;
+  --brand-dark: #0f2a45;
+  --bar: var(--brand);
   --bar-ink: #ffffff;
   --footer: #1b1813;
   --footer-ink: #f3eee3;

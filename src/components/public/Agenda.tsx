@@ -163,7 +163,7 @@ export function UpcomingList({ events, locale, labels }: { events: CalendarEvent
     <ul className="hairline-list -mt-3">
       {events.map((e) => (
         <li key={e.id} className="flex gap-3 py-3">
-          <p className="w-16 shrink-0 self-start bg-accent py-2 text-center text-accent-ink">
+          <p className="w-16 shrink-0 self-start bg-brand py-2 text-center text-accent-ink">
             <span className="font-headline block text-[30px] leading-none font-bold tabular-nums">{Number(e.starts_on.slice(8))}</span>
             <span className="mt-1 block font-ui text-[14px] font-semibold">{formatCalendarDay(e.starts_on, locale).split(' ').slice(1).join(' ')}</span>
           </p>
