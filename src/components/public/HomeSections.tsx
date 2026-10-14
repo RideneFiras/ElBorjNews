@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { CSSProperties } from 'react';
 import { getTranslations } from 'next-intl/server';
 import type { Lang } from '@/lib/data/types';
 import type { ResolvedSection } from '@/lib/public/homepage';
@@ -103,9 +104,11 @@ function CategoryBlock({ s, locale, more }: { s: Of<'category'>; locale: Lang; m
       );
   }
   return (
-    <section className="container-page mt-12" aria-labelledby={`h-${s.id}`}>
-      <SectionHeader id={`h-${s.id}`} title={s.title} href={href} moreLabel={more} color={s.category.color} />
-      {body}
+    <section className="section-band mt-12" style={{ '--sec': s.category.color } as CSSProperties} aria-labelledby={`h-${s.id}`}>
+      <div className="container-page">
+        <SectionHeader id={`h-${s.id}`} title={s.title} href={href} moreLabel={more} color={s.category.color} />
+        {body}
+      </div>
     </section>
   );
 }

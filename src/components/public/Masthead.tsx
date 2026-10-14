@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { CSSProperties } from 'react';
 import { getTranslations } from 'next-intl/server';
 import type { ArticleCard, Category, Lang, StaticPage } from '@/lib/data/types';
 import type { SiteSettings } from '@/lib/data/settings';
@@ -44,22 +45,23 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
     <header className="no-print-border">
       <a href="#content" className="skip-link">{t('skipToContent')}</a>
 
-      {/* 1. Utility bar (desktop) */}
-      <div className="relative hidden border-b border-rule lg:block">
-        <div className="container-page meta flex h-8 items-center justify-between text-ink-2">
+      {/* 1–2. The red band: utility bar (desktop) and nameplate, in white */}
+      <div className="masthead-band">
+      <div className="masthead-utility relative hidden lg:block">
+        <div className="container-page meta flex h-9 items-center justify-between">
           <p>
             <time dateTime={now.toISOString()}>{formatDate(now, locale, 'full')}</time>
             {hijri && <span> · <span lang="ar">{hijri}</span></span>}
           </p>
           <div className="flex items-center gap-4">
             <details className="group">
-              <summary className="flex cursor-pointer list-none items-center gap-1 hover:text-accent" aria-label={t('search')}>
+              <summary className="flex min-h-9 cursor-pointer list-none items-center gap-1" aria-label={t('search')}>
                 <SearchIcon size={18} />
               </summary>
-              <div className="absolute inset-x-0 z-40 mt-2 border-b border-rule bg-paper">{searchForm}</div>
+              <div className="absolute inset-x-0 z-40 mt-2 border-b border-rule bg-paper text-ink">{searchForm}</div>
             </details>
             {socials.map(([k, url]) => (
-              <a key={k} href={url} rel="noopener" target="_blank" className="hover:text-accent">
+              <a key={k} href={url} rel="noopener" target="_blank">
                 {SOCIAL_LABELS[k]?.[locale] ?? k}
               </a>
             ))}
@@ -69,7 +71,7 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
 
       {/* 2. Nameplate: desktop with ears, mobile compact with menu/search */}
       <div className="container-page">
-        <div className="flex h-14 items-center justify-between lg:hidden">
+        <div className="flex h-16 items-center justify-between lg:hidden">
           <MobileMenu
             labels={{ menu: t('menu'), close: t('close'), sections: t('sections'), pages: t('pages') }}
             sections={top.map((c) => ({
@@ -85,17 +87,17 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
               { href: `/${locale}/app`, label: ta('footerLink', { site: pick(settings.site_name, locale) }) },
             ]}
           />
-          <Nameplate settings={settings} locale={locale} size="compact" />
+          <Nameplate settings={settings} locale={locale} size="compact" reverse />
           <Link prefetch={false} href={`/${locale}/search`} className="inline-flex h-11 w-11 items-center justify-center" aria-label={t('search')}>
             <SearchIcon />
           </Link>
         </div>
-        <div className="hidden grid-cols-[1fr_auto_1fr] items-center gap-6 py-5 lg:grid">
-          <div className="meta max-w-[16rem] justify-self-start border-s-2 border-accent ps-3">
+        <div className="hidden grid-cols-[1fr_auto_1fr] items-center gap-6 py-3 lg:grid">
+          <div className="meta max-w-[16rem] justify-self-start">
             {settings.masthead_ears.start === 'latest' && latest && (
               <>
-                <span className="kicker block">{t('latestEar')}</span>
-                <Link prefetch={false} href={articleHref(latest)} className="font-headline text-[16px] leading-snug font-semibold text-ink hover:text-accent"
+                <span className="masthead-ear-label">{t('latestEar')}</span>
+                <Link prefetch={false} href={articleHref(latest)} className="mt-1.5 block font-headline text-[18px] leading-snug font-semibold"
                   lang={latest.language !== locale ? latest.language : undefined}>
                   {latest.title}
                 </Link>
@@ -103,15 +105,13 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
             )}
           </div>
           <div className="text-center">
-            <Nameplate settings={settings} locale={locale} />
+            <Nameplate settings={settings} locale={locale} reverse />
             {tagline && <p className="meta mt-1">{tagline}</p>}
           </div>
-          <div className="meta max-w-[16rem] justify-self-end border-e-2 border-accent pe-3 text-end">{earEnd}</div>
+          <div className="max-w-[16rem] justify-self-end text-end font-ui text-[16px] font-semibold">{earEnd}</div>
         </div>
       </div>
-
-      {/* 3. Double rule */}
-      <div className="container-page"><div className="double-rule" /></div>
+      </div>
 
       {/* 4. Section nav: scrollable strip on mobile, dropdowns on desktop; slim sticky bar on desktop */}
       <nav aria-label={t('sections')} className="masthead-nav z-30 lg:sticky lg:top-0">
@@ -123,7 +123,7 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
               const kids = childrenOf(c.id);
               return (
                 <li key={c.id} className="group relative">
-                  <Link prefetch={false} href={sectionHref(locale, c.slug)} data-section={c.slug}
+                  <Link prefetch={false} href={sectionHref(locale, c.slug)} data-section={c.slug} style={{ '--sec': c.color } as CSSProperties}
                     className="nav-link inline-flex min-h-12 items-center border-b-[3px] border-transparent px-3 font-ui text-[17px] font-bold">
                     {categoryName(c, locale)}
                   </Link>
@@ -140,12 +140,12 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
               );
             })}
             <li>
-              <Link prefetch={false} href={`/${locale}/agenda`} data-section="agenda" className="nav-link inline-flex min-h-12 items-center border-b-[3px] border-transparent px-3 font-ui text-[17px] font-bold">
+              <Link prefetch={false} href={`/${locale}/agenda`} data-section="agenda" style={{ '--sec': 'var(--accent)' } as CSSProperties} className="nav-link inline-flex min-h-12 items-center border-b-[3px] border-transparent px-3 font-ui text-[17px] font-bold">
                 {tg('title')}
               </Link>
             </li>
             <li>
-              <Link prefetch={false} href={`/${locale}/latest`} className="nav-link inline-flex min-h-12 items-center border-b-[3px] border-transparent px-3 font-ui text-[17px] font-bold">
+              <Link prefetch={false} href={`/${locale}/latest`} style={{ '--sec': 'var(--ink)' } as CSSProperties} className="nav-link inline-flex min-h-12 items-center border-b-[3px] border-transparent px-3 font-ui text-[17px] font-bold">
                 {t('allNews')}
               </Link>
             </li>

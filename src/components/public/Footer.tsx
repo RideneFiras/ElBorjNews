@@ -65,7 +65,7 @@ export async function Footer({ locale, settings, categories, menu, pages }: {
     <footer className="site-footer no-print mt-16 bg-footer text-footer-ink">
       <div className="container-page py-8">
         <div className="mb-6 flex flex-col items-start gap-1 border-b border-white/20 pb-6">
-          <Nameplate settings={settings} locale={locale} size="small" />
+          <Nameplate settings={settings} locale={locale} size="small" reverse />
           <p className="meta text-footer-ink-2">{pick(settings.tagline, locale)}</p>
         </div>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">

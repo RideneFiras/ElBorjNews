@@ -28,7 +28,7 @@ export function Kicker({ a, locale, label = false }: { a: ArticleCard; locale: L
   return (
     <p className={`kicker ${label ? 'mb-2.5' : 'mb-1.5'}`} style={{ '--kicker': a.category_color } as CSSProperties}>
       {foreign && <span className="me-2 border border-current px-1 text-[11px] leading-none">{a.language.toUpperCase()}</span>}
-      <bdi className={label ? 'kicker-label' : undefined}>{kickerOf(a)}</bdi>
+      <bdi className={label ? 'kicker-label' : 'kicker-dot'}>{kickerOf(a)}</bdi>
     </p>
   );
 }
@@ -101,7 +101,7 @@ export function LeadStory({ a, locale, layout = 'stacked', priority = true }: { 
   return (
     <ItemFrame a={a} locale={locale} className={`${a.is_sponsored ? 'bg-paper-2 p-4' : ''} ${side ? 'grid gap-4 lg:grid-cols-12 lg:gap-6' : ''}`}>
       {a.cover && (
-        <figure className={side ? 'lg:col-span-7' : 'mb-4'}>
+        <figure className={side ? 'lg:col-span-7' : 'lead-figure mb-4'}>
           <Link prefetch={false} href={articleHref(a)} tabIndex={-1} aria-hidden="true">
             <Img media={a.cover} lang={a.language} alt={a.cover_alt} priority={priority} sizes="(min-width: 1024px) 760px, 100vw" />
           </Link>
@@ -178,8 +178,8 @@ export function HeadlineItem({ a, locale }: { a: ArticleCard; locale: Lang }) {
 
 export function NumberedItem({ a, locale, n }: { a: ArticleCard; locale: Lang; n: number }) {
   return (
-    <ItemFrame a={a} locale={locale} as="li" className="flex items-start gap-3 py-3">
-      <span className="font-headline w-8 shrink-0 text-[34px] leading-none font-bold text-accent" aria-hidden="true">{n}</span>
+    <ItemFrame a={a} locale={locale} as="li" className="flex items-start gap-4 py-3">
+      <span className="num-block shrink-0" aria-hidden="true">{n}</span>
       <div className="min-w-0">
         <Title a={a} className="headline-3" />
       </div>

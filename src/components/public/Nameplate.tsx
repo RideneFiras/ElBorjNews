@@ -10,7 +10,8 @@ import { pick } from '@/lib/data/settings';
  *   masthead, beside it in the small/compact bars);
  * - text nameplate off + logo: the logo image alone (a full lockup).
  */
-export function Nameplate({ settings, locale, size = 'large' }: { settings: SiteSettings; locale: 'ar' | 'fr'; size?: 'large' | 'small' | 'compact' }) {
+/** `reverse`: white name and logo, for the red masthead band and the dark footer. */
+export function Nameplate({ settings, locale, size = 'large', reverse = false }: { settings: SiteSettings; locale: 'ar' | 'fr'; size?: 'large' | 'small' | 'compact'; reverse?: boolean }) {
   const name = pick(settings.site_name, locale);
   const nameAr = settings.site_name.ar || name;
   const nameFr = settings.site_name.fr;
@@ -20,7 +21,7 @@ export function Nameplate({ settings, locale, size = 'large' }: { settings: Site
   const text = { large: 'text-[56px] lg:text-[84px]', small: 'text-[34px]', compact: 'text-[30px]' };
   if (logo && !settings.logo.use_text_nameplate) {
     return (
-      <Link prefetch={false} href={`/${locale}`} className="masthead-nameplate inline-flex flex-col items-center text-ink hover:text-ink" aria-label={name}>
+      <Link prefetch={false} href={`/${locale}`} className={`masthead-nameplate inline-flex flex-col items-center ${reverse ? 'nameplate-reverse' : 'text-ink hover:text-ink'}`} aria-label={name}>
         {/* eslint-disable-next-line @next/next/no-img-element -- uploaded SVG/PNG logo */}
         <img src={logo} alt={name} className={`${heights[size]} w-auto`} />
       </Link>
@@ -28,14 +29,14 @@ export function Nameplate({ settings, locale, size = 'large' }: { settings: Site
   }
   return (
     <Link prefetch={false} href={`/${locale}`}
-      className={`masthead-nameplate inline-flex items-center text-ink hover:text-ink ${size === 'large' ? 'flex-col' : 'flex-row gap-2'}`} aria-label={name}>
+      className={`masthead-nameplate inline-flex items-center ${reverse ? 'nameplate-reverse' : 'text-ink hover:text-ink'} ${size === 'large' ? 'flex-col' : 'flex-row gap-2'}`} aria-label={name}>
       {logo && (
         // eslint-disable-next-line @next/next/no-img-element -- uploaded SVG/PNG mark, decorative next to the name
         <img src={logo} alt="" aria-hidden="true" className={`${markHeights[size]} w-auto ${size === 'large' ? 'mb-1' : ''}`} />
       )}
       <span lang="ar" className={`nameplate ${text[size]}`}>{nameAr}</span>
       {size === 'large' && nameFr && (
-        <span lang="fr" dir="ltr" className="font-headline mt-0 text-[15px] font-semibold tracking-[0.2em] text-ink-2 uppercase">{nameFr}</span>
+        <span lang="fr" dir="ltr" className={`font-headline mt-0 text-[15px] font-semibold tracking-[0.2em] uppercase ${reverse ? 'opacity-85' : 'text-ink-2'}`}>{nameFr}</span>
       )}
     </Link>
   );

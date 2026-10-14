@@ -49,7 +49,7 @@ export async function ArticleView({ a, locale, settings, related, moreFromSectio
   const sectionName = (lang === 'fr' ? a.category_name_fr : null) || a.category_name_ar;
 
   const cover = m && (
-    <figure className={tallCover ? '' : 'mt-6'}>
+    <figure className={tallCover ? '' : 'lead-figure mt-6'}>
       {/* Tall images (posters, flyers) are shown whole: cropping them to 3:2 cuts their text. */}
       {m.height && m.width && m.height > m.width ? (
         <Img media={m} lang={lang} alt={a.cover_alt} priority ratio="auto" className="max-h-[85svh] w-auto" sizes="(min-width: 1024px) 600px, 100vw" />
