@@ -59,8 +59,9 @@ export default async function TopicPage({ params }: Params) {
         {image && page === 1 && <div className="w-40 shrink-0"><Img media={image} lang={locale} ratio="1/1" sizes="160px" /></div>}
         <div className="flex-1">
           <p className="kicker mb-1">{t(`kind_${tag.kind}`)}</p>
-          <h1 className="headline-1 pb-2">{tagName(tag, locale)}</h1>
-          <div className="section-rule" />
+          <div className="section-head">
+            <h1 className="section-title page-title">{tagName(tag, locale)}</h1>
+          </div>
           {description && page === 1 && <p className="dek mt-3 max-w-[var(--measure)]">{description}</p>}
           {tag.kind === 'club' && page === 1 && <p className="meta mt-2">{t('resultsSoon')}</p>}
         </div>

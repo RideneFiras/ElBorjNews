@@ -63,8 +63,9 @@ export default async function SearchPage({ params, searchParams }: Props) {
 
   return (
     <div className="container-page mt-8 max-w-[960px]">
-      <h1 className="headline-1 pb-2">{t('title')}</h1>
-      <div className="section-rule mb-6" />
+      <div className="section-head mb-6">
+        <h1 className="section-title page-title">{t('title')}</h1>
+      </div>
       <form method="get" role="search" className="space-y-4">
         <div className="flex gap-2">
           <label htmlFor="q" className="sr-only">{t('title')}</label>

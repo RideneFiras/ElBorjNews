@@ -5,8 +5,9 @@ export function StaticPageView({ page, children, after }: { page: StaticPage; ch
   return (
     <div className="container-page mt-8">
       <article className="mx-auto max-w-[var(--measure)]">
-        <h1 className="headline-1 pb-2">{page.title}</h1>
-        <div className="section-rule mb-8" />
+        <div className="section-head mb-8">
+          <h1 className="section-title page-title">{page.title}</h1>
+        </div>
         <div className="prose-article" dangerouslySetInnerHTML={{ __html: page.body_html ?? '' }} />
         {children}
       </article>

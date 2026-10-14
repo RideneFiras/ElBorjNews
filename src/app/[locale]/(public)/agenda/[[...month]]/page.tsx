@@ -56,10 +56,10 @@ export default async function AgendaPage({ params }: Params) {
   const next = shiftMonth(month, 1);
   const nav = (
     <p className="meta flex justify-between gap-4">
-      <Link prefetch={false} href={`/${locale}/agenda/${prev}`} className="hover:text-accent">
+      <Link prefetch={false} href={`/${locale}/agenda/${prev}`} className="btn">
         <span aria-hidden="true" className="inline-block ltr:-scale-x-100">→</span> {formatMonth(prev, locale)}
       </Link>
-      <Link prefetch={false} href={`/${locale}/agenda/${next}`} className="hover:text-accent">
+      <Link prefetch={false} href={`/${locale}/agenda/${next}`} className="btn">
         {formatMonth(next, locale)} <span aria-hidden="true" className="inline-block ltr:-scale-x-100">←</span>
       </Link>
     </p>

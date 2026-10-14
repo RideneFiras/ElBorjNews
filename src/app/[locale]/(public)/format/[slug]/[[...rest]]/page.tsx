@@ -48,8 +48,9 @@ export default async function FormatPage({ params }: Params) {
   if (page > totalPages) notFound();
   return (
     <div className="container-page mt-8">
-      <h1 className="headline-1 pb-2">{nameOf(f, locale)}</h1>
-      <div className="section-rule mb-8" />
+      <div className="section-head mb-8">
+        <h1 className="section-title page-title">{nameOf(f, locale)}</h1>
+      </div>
       <Listing locale={locale} items={items} page={page} totalPages={totalPages} basePath={formatHref(locale, slug)} mostRead={mostRead} empty={ts('empty')} />
     </div>
   );

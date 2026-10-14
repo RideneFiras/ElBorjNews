@@ -97,8 +97,8 @@ export async function Footer({ locale, settings, categories, menu, pages }: {
               </dl>
             )}
             <p className="meta mt-4 flex flex-wrap gap-x-4 gap-y-1 text-footer-ink">
-              {socials.map(([k, url]) => <a key={k} href={url} target="_blank" rel="noopener">{SOCIAL_LABELS[k]?.[locale] ?? k}</a>)}
-              <a href={`/${locale}/rss.xml`}>{t('rss')}</a>
+              {socials.map(([k, url]) => <a key={k} href={url} target="_blank" rel="noopener" className="inline-flex min-h-11 items-center">{SOCIAL_LABELS[k]?.[locale] ?? k}</a>)}
+              <a href={`/${locale}/rss.xml`} className="inline-flex min-h-11 items-center">{t('rss')}</a>
             </p>
           </div>
         </div>

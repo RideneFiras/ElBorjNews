@@ -64,7 +64,7 @@ export function EventLine({ e, locale, labels, showDate = false, calendar }: {
         {range && <span>{range}</span>}
         {time && <span dir="ltr" className="tabular-nums">{time}</span>}
         {e.place && <bdi>{e.place}</bdi>}
-        {e.town && <Link prefetch={false} href={topicHref(locale, e.town.slug)} className="hover:text-accent">{townName(e, locale)}</Link>}
+        {e.town && <Link prefetch={false} href={topicHref(locale, e.town.slug)} className="-my-3 inline-flex min-h-11 items-center underline decoration-rule underline-offset-4 hover:text-accent">{townName(e, locale)}</Link>}
         {cal === 'link' && (
           <a href={`/api/events/${e.id}`} rel="nofollow" className="-my-3 inline-flex min-h-11 items-center underline decoration-rule underline-offset-4 hover:text-accent">{labels.addToCalendar}</a>
         )}

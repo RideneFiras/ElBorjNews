@@ -73,14 +73,16 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
       <div className="container-page">
         <div className="flex h-16 items-center justify-between lg:hidden">
           <MobileMenu
-            labels={{ menu: t('menu'), close: t('close'), sections: t('sections'), pages: t('pages') }}
+            labels={{ menu: t('menu'), close: t('close'), sections: t('sections'), pages: t('pages'), search: t('search'), searchPlaceholder: t('searchPlaceholder') }}
+            searchAction={`/${locale}/search`}
             sections={top.map((c) => ({
               href: sectionHref(locale, c.slug),
+              color: c.color,
               label: categoryName(c, locale),
               children: childrenOf(c.id).map((s) => ({ href: sectionHref(locale, s.slug), label: categoryName(s, locale) })),
             })).concat([
-              { href: `/${locale}/agenda`, label: tg('title'), children: [] },
-              { href: `/${locale}/towns`, label: tg('towns'), children: [] },
+              { href: `/${locale}/agenda`, label: tg('title'), color: 'var(--brand)', children: [] },
+              { href: `/${locale}/towns`, label: tg('towns'), color: 'var(--brand)', children: [] },
             ])}
             pages={[
               ...pages.filter((p) => p.show_in_footer).map((p) => ({ href: pageHref(locale, p.slug, p.page_kind), label: p.title })),

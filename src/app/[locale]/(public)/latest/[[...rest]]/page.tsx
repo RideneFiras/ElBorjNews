@@ -57,8 +57,9 @@ export default async function LatestPage({ params }: Params) {
 
   return (
     <div className="container-page mt-8">
-      <h1 className="headline-1 pb-2">{t('title')}</h1>
-      <div className="section-rule mb-6" />
+      <div className="section-head mb-6">
+        <h1 className="section-title page-title">{t('title')}</h1>
+      </div>
       <div className="max-w-[860px]">
         {groups.map((g) => (
           <section key={g.key} className="mb-8" aria-labelledby={`d-${g.key}`}>

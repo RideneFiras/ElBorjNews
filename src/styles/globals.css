@@ -126,6 +126,10 @@
     color: #fff;
     padding: 6px 14px 4px;
   }
+  .section-head .page-title {
+    font-size: clamp(26px, 1vw + 22px, 34px);
+    padding: 8px 16px 6px;
+  }
   .section-head .section-title a,
   .section-head .section-title a:hover {
     color: #fff;
@@ -598,6 +602,22 @@
   }
   .masthead-band :focus-visible {
     outline-color: var(--bar-ink);
+  }
+  /* The phone menu sheet lives inside the band: back to ink on paper. */
+  .masthead-band .mobile-sheet a,
+  .masthead-band .mobile-sheet a:hover {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .masthead-band .mobile-sheet .mobile-sheet-section:hover {
+    color: var(--sec, var(--ink));
+  }
+  .masthead-band .mobile-sheet :focus-visible {
+    outline-color: var(--focus);
+  }
+  .masthead-band .mobile-sheet .mobile-sheet-close :focus-visible,
+  .masthead-band .mobile-sheet .mobile-sheet-close:focus-visible {
+    outline-color: #fff;
   }
   .masthead-utility {
     background: var(--brand-dark);
