@@ -35,7 +35,7 @@ export function NavScroll({ children, label }: { children: ReactNode; label: str
             const rtl = getComputedStyle(ul ?? document.documentElement).direction === 'rtl';
             ul?.scrollBy({ left: rtl ? -160 : 160, behavior: 'smooth' });
           }}
-          className="absolute inset-y-0 end-0 flex w-10 items-center justify-center border-s border-rule bg-paper font-ui text-[18px] text-ink-2 lg:hidden"
+          className="absolute inset-y-0 end-0 flex w-10 items-center justify-center border-s border-white/40 bg-bar font-ui text-[20px] font-bold text-bar-ink lg:hidden"
         >
           <span aria-hidden="true" className="inline-block ltr:-scale-x-100">←</span>
         </button>

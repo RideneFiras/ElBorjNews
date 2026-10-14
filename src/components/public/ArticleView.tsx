@@ -72,8 +72,8 @@ export async function ArticleView({ a, locale, settings, related, moreFromSectio
                 {tc('sponsoredBy', { sponsor: a.sponsor_name ?? '' })}
               </p>
             )}
-            <p className="kicker mb-2" style={{ '--kicker': a.category_color } as CSSProperties}>
-              <Link prefetch={false} href={sectionHref(lang, a.category_slug)}><bdi>{kickerOf(a)}</bdi></Link>
+            <p className="kicker mb-3" style={{ '--kicker': a.category_color } as CSSProperties}>
+              <Link prefetch={false} href={sectionHref(lang, a.category_slug)} className="kicker-label"><bdi>{kickerOf(a)}</bdi></Link>
             </p>
             <h1 id="article-title" className="headline-1">{a.title}</h1>
           </div>

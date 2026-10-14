@@ -23,14 +23,14 @@ export function ShareRow({ url, title, labels }: {
   const wa = `https://wa.me/?text=${encodeURIComponent(`${title} ${withUtm(url, 'whatsapp')}`)}`;
   const fb = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(withUtm(url, 'facebook'))}`;
   const x = `https://x.com/intent/post?url=${encodeURIComponent(withUtm(url, 'x'))}&text=${encodeURIComponent(title)}`;
-  const item = 'inline-flex min-h-11 items-center gap-2 px-3 font-ui text-[14px] font-semibold border border-rule hover:border-accent hover:text-accent';
+  const item = 'inline-flex min-h-12 items-center gap-2 px-4 font-ui text-[16px] font-bold border border-ink-3 hover:border-accent hover:text-accent';
 
   return (
     <div className="share-row flex flex-wrap items-center gap-2" aria-label={labels.share}>
-      <a href={wa} target="_blank" rel="noopener" className={`${item} border-ink`} data-share="whatsapp">
+      <a href={wa} target="_blank" rel="noopener" className={`${item} border-whatsapp bg-whatsapp text-white hover:border-ink hover:bg-ink hover:text-white`} data-share="whatsapp">
         <WhatsappIcon size={20} /> <span>{labels.whatsapp}</span>
       </a>
-      <a href={fb} target="_blank" rel="noopener" className={item} data-share="facebook">
+      <a href={fb} target="_blank" rel="noopener" className={`${item} border-facebook bg-facebook text-white hover:border-ink hover:bg-ink hover:text-white`} data-share="facebook">
         <FacebookIcon size={18} /> <span className="hidden md:inline">{labels.facebook}</span>
         <span className="sr-only md:hidden">{labels.facebook}</span>
       </a>

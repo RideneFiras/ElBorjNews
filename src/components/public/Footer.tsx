@@ -62,22 +62,22 @@ export async function Footer({ locale, settings, categories, menu, pages }: {
   const siteName = pick(settings.site_name, locale);
 
   return (
-    <footer className="no-print mt-16 border-t-[3px] border-rule-strong">
+    <footer className="site-footer no-print mt-16 bg-footer text-footer-ink">
       <div className="container-page py-8">
-        <div className="mb-6 flex flex-col items-start gap-1 border-b border-rule pb-6">
+        <div className="mb-6 flex flex-col items-start gap-1 border-b border-white/20 pb-6">
           <Nameplate settings={settings} locale={locale} size="small" />
-          <p className="meta">{pick(settings.tagline, locale)}</p>
+          <p className="meta text-footer-ink-2">{pick(settings.tagline, locale)}</p>
         </div>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            <h2 className="kicker mb-3 text-ink">{t('sections')}</h2>
-            <ul className="space-y-1.5 font-ui text-[15px]">
+            <h2 className="kicker mb-3 text-footer-ink-2">{t('sections')}</h2>
+            <ul className="space-y-2 font-ui text-[16px] font-semibold">
               {top.map((c) => <li key={c.id}><Link prefetch={false} href={sectionHref(locale, c.slug)}>{categoryName(c, locale)}</Link></li>)}
             </ul>
           </div>
           <div className="col-rule">
-            <h2 className="kicker mb-3 text-ink">{t('pages')}</h2>
-            <ul className="space-y-1.5 font-ui text-[15px]">
+            <h2 className="kicker mb-3 text-footer-ink-2">{t('pages')}</h2>
+            <ul className="space-y-2 font-ui text-[16px] font-semibold">
               {links.map((l) => (
                 <li key={l.href}>
                   {l.external ? <a href={l.href} target="_blank" rel="noopener">{l.label}</a> : <Link prefetch={false} href={l.href}>{l.label}</Link>}
@@ -90,19 +90,19 @@ export async function Footer({ locale, settings, categories, menu, pages }: {
               <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 font-ui text-[14px]">
                 {legal.map(([k, val]) => (
                   <div key={k} className="contents">
-                    <dt className="text-ink-3">{k}</dt>
+                    <dt className="text-footer-ink-2">{k}</dt>
                     <dd><bdi>{val}</bdi></dd>
                   </div>
                 ))}
               </dl>
             )}
-            <p className="meta mt-4 flex flex-wrap gap-x-4 gap-y-1">
+            <p className="meta mt-4 flex flex-wrap gap-x-4 gap-y-1 text-footer-ink">
               {socials.map(([k, url]) => <a key={k} href={url} target="_blank" rel="noopener">{SOCIAL_LABELS[k]?.[locale] ?? k}</a>)}
               <a href={`/${locale}/rss.xml`}>{t('rss')}</a>
             </p>
           </div>
         </div>
-        <p className="meta mt-8 border-t border-rule pt-4">{t('rights', { year: new Date().getFullYear(), site: siteName })}</p>
+        <p className="meta mt-8 border-t border-white/20 pt-4 text-footer-ink-2">{t('rights', { year: new Date().getFullYear(), site: siteName })}</p>
       </div>
     </footer>
   );

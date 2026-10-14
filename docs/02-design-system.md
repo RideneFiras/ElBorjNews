@@ -49,6 +49,8 @@ Define all tokens as CSS custom properties on `:root`, and map them into Tailwin
 | `--focus` | `#0B5CAD` | Keyboard focus outline (accessibility only) |
 | `--ok` / `--warn` / `--danger` | `#2F6B3A` / `#9A6B00` / `#A3161C` | Admin status only |
 
+> **2026-10-14 update (DECISIONS.md → "Domain, languages and clearer colours"):** readers asked for more colour. Current values are in `src/styles/tokens.css`. The section nav is a red bar with white text; **each section has its own colour** (`categories.color`), used as a solid block behind the section title, on the section rule and for kickers (a solid label on the lead story and the article page); the footer is dark; share buttons use WhatsApp/Facebook colours. Small text is 14–15px and darker. The rules below about one accent colour and category colours "only as a notch" are superseded by this; everything else (no cards, shadows, gradients, pills, emoji) still holds.
+
 Rules:
 - Body text `--ink` on `--paper` must keep contrast ≥ 7:1. Check `--ink-3` ≥ 4.5:1 for small text.
 - **One accent colour.** Category colours exist in the database (editable), but on the public site they are used only as a 3px notch on the section rule and the kicker colour, never as backgrounds. Default all category colours to `--accent`.

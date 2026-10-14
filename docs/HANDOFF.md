@@ -75,6 +75,12 @@ session continuing the work._
 - Flow: email from the journalist → draft on the site → approval email to Firas → publish + Facebook post.
 - Next: Firas creates the Oracle server, then follow `n8n/README.md` (credentials: Gmail OAuth, publisher token, Facebook Page token; then a test email).
 
+## Branch `design/clearer-colors` (2026-10-14, waiting for Firas's OK, not merged or deployed)
+
+- borj.tn is the site address (`SITE_URL`), www/workers.dev redirect to it; public site Arabic only, admin French only; clearer colour design. Details: DECISIONS.md → "Domain, languages and clearer colours".
+- **Before deploying:** run `supabase/content-2026-10-14-colours-and-language.sql` (section colours + 6 Arabic articles saved as French), then regenerate the cache. Without the language fix those 6 articles show as French on `/ar`.
+- **Firas, Supabase dashboard:** Authentication → URL Configuration: Site URL `https://borj.tn`, redirect URLs `https://borj.tn/**`. Optionally `private.app_config.revalidate_url` → `https://borj.tn/api/revalidate` (the workers.dev one keeps working).
+
 ## Next 5 concrete steps (for whoever continues)
 
 1. Firas: Supabase Auth URLs for the live address (above), then log in on https://www.elborj.workers.dev/ar/admin/login.

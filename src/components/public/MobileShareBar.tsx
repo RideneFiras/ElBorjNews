@@ -36,14 +36,14 @@ export function MobileShareBar({ url, title, labels }: { url: string; title: str
 
   const wa = `https://wa.me/?text=${encodeURIComponent(`${title} ${withUtm(url, 'whatsapp')}`)}`;
   const fb = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(withUtm(url, 'facebook'))}`;
-  const btn = 'inline-flex h-11 items-center justify-center gap-2 border border-rule px-3 font-ui text-[14px] font-semibold';
+  const btn = 'inline-flex h-12 items-center justify-center gap-2 border border-ink-3 px-3 font-ui text-[16px] font-bold';
   return (
     <div aria-hidden={!show} className={`no-print fixed inset-x-0 bottom-0 z-40 border-t border-rule-strong bg-paper pb-[env(safe-area-inset-bottom)] transition-transform duration-200 lg:hidden ${show ? 'translate-y-0' : 'pointer-events-none translate-y-full'}`}>
       <div className="container-page flex items-center gap-2 py-2">
-        <a href={wa} target="_blank" rel="noopener" data-share="whatsapp" tabIndex={show ? 0 : -1} className={`${btn} flex-1 border-ink`}>
+        <a href={wa} target="_blank" rel="noopener" data-share="whatsapp" tabIndex={show ? 0 : -1} className={`${btn} flex-1 border-whatsapp bg-whatsapp text-white hover:text-white`}>
           <WhatsappIcon size={20} /> <span>{labels.whatsapp}</span>
         </a>
-        <a href={fb} target="_blank" rel="noopener" data-share="facebook" tabIndex={show ? 0 : -1} className={`${btn} w-12`} aria-label={labels.facebook}>
+        <a href={fb} target="_blank" rel="noopener" data-share="facebook" tabIndex={show ? 0 : -1} className={`${btn} w-12 border-facebook bg-facebook text-white hover:text-white`} aria-label={labels.facebook}>
           <FacebookIcon size={18} />
         </a>
         <button type="button" tabIndex={show ? 0 : -1} className={`${btn} w-12`} aria-label={copied ? labels.copied : labels.share} onClick={async () => {

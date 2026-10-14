@@ -114,24 +114,24 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
       <div className="container-page"><div className="double-rule" /></div>
 
       {/* 4. Section nav: scrollable strip on mobile, dropdowns on desktop; slim sticky bar on desktop */}
-      <nav aria-label={t('sections')} className="masthead-nav z-30 border-b border-rule bg-paper lg:sticky lg:top-0">
+      <nav aria-label={t('sections')} className="masthead-nav z-30 lg:sticky lg:top-0">
         <div className="container-page flex items-center gap-4">
           <span className="masthead-mini shrink-0"><Nameplate settings={settings} locale={locale} size="small" /></span>
           <NavScroll label={t('moreSections')}>
-          <ul className="flex gap-5 overflow-x-auto whitespace-nowrap pe-10 [scrollbar-width:none] lg:gap-6 lg:overflow-visible lg:pe-0">
+          <ul className="-ms-3 flex overflow-x-auto whitespace-nowrap pe-10 [scrollbar-width:none] lg:overflow-visible lg:pe-0">
             {top.map((c) => {
               const kids = childrenOf(c.id);
               return (
                 <li key={c.id} className="group relative">
                   <Link prefetch={false} href={sectionHref(locale, c.slug)} data-section={c.slug}
-                    className="nav-link inline-flex min-h-11 items-center border-b-2 border-transparent font-ui text-[15px] font-semibold lg:text-[16px]">
+                    className="nav-link inline-flex min-h-12 items-center border-b-[3px] border-transparent px-3 font-ui text-[17px] font-bold">
                     {categoryName(c, locale)}
                   </Link>
                   {kids.length > 0 && (
-                    <ul className="invisible absolute start-0 top-full z-40 hidden min-w-48 border border-rule bg-paper py-1 group-focus-within:visible group-hover:visible lg:block">
+                    <ul className="invisible absolute start-0 top-full z-40 hidden min-w-48 border border-rule bg-paper py-1 text-ink group-focus-within:visible group-hover:visible lg:block">
                       {kids.map((k) => (
                         <li key={k.id}>
-                          <Link prefetch={false} href={sectionHref(locale, k.slug)} className="block px-4 py-2 font-ui text-[15px] hover:text-accent">{categoryName(k, locale)}</Link>
+                          <Link prefetch={false} href={sectionHref(locale, k.slug)} className="block px-4 py-2 font-ui text-[16px] font-semibold hover:text-accent">{categoryName(k, locale)}</Link>
                         </li>
                       ))}
                     </ul>
@@ -140,12 +140,12 @@ export async function Masthead({ locale, settings, categories, pages, latest, br
               );
             })}
             <li>
-              <Link prefetch={false} href={`/${locale}/agenda`} data-section="agenda" className="nav-link inline-flex min-h-11 items-center border-b-2 border-transparent font-ui text-[15px] font-semibold lg:text-[16px]">
+              <Link prefetch={false} href={`/${locale}/agenda`} data-section="agenda" className="nav-link inline-flex min-h-12 items-center border-b-[3px] border-transparent px-3 font-ui text-[17px] font-bold">
                 {tg('title')}
               </Link>
             </li>
             <li>
-              <Link prefetch={false} href={`/${locale}/latest`} className="nav-link inline-flex min-h-11 items-center border-b-2 border-transparent font-ui text-[15px] font-semibold text-ink-2 lg:text-[16px]">
+              <Link prefetch={false} href={`/${locale}/latest`} className="nav-link inline-flex min-h-12 items-center border-b-[3px] border-transparent px-3 font-ui text-[17px] font-bold">
                 {t('allNews')}
               </Link>
             </li>

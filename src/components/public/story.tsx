@@ -22,12 +22,13 @@ function ItemFrame({ a, locale, as: Tag = 'article', className = '', children, s
   );
 }
 
-export function Kicker({ a, locale }: { a: ArticleCard; locale: Lang }) {
+/** Kicker in the section's colour; `label` sets it as a solid block (lead story, article page). */
+export function Kicker({ a, locale, label = false }: { a: ArticleCard; locale: Lang; label?: boolean }) {
   const foreign = a.language !== locale;
   return (
-    <p className="kicker mb-1.5" style={{ '--kicker': a.category_color } as CSSProperties}>
+    <p className={`kicker ${label ? 'mb-2.5' : 'mb-1.5'}`} style={{ '--kicker': a.category_color } as CSSProperties}>
       {foreign && <span className="me-2 border border-current px-1 text-[11px] leading-none">{a.language.toUpperCase()}</span>}
-      <bdi>{kickerOf(a)}</bdi>
+      <bdi className={label ? 'kicker-label' : undefined}>{kickerOf(a)}</bdi>
     </p>
   );
 }
@@ -108,7 +109,7 @@ export function LeadStory({ a, locale, layout = 'stacked', priority = true }: { 
         </figure>
       )}
       <div className={side ? 'lg:col-span-5' : ''}>
-        <Kicker a={a} locale={locale} />
+        <Kicker a={a} locale={locale} label />
         <Title a={a} as="h2" className="lead-headline" />
         {(a.subtitle || a.excerpt) && <p className="dek mt-3">{a.subtitle || a.excerpt}</p>}
         <MetaLine a={a} className="mt-3" />
@@ -131,13 +132,13 @@ export function SecondaryStory({ a, locale, image = true, horizontal = false, ex
   return (
     <ItemFrame a={a} locale={locale} className={`${a.is_sponsored ? 'bg-paper-2 p-3' : ''} ${horizontal && showImg ? 'grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]' : ''} ${compact ? 'max-lg:flex max-lg:items-start max-lg:gap-3' : ''}`}>
       {showImg && a.cover && (
-        <Link prefetch={false} href={articleHref(a)} tabIndex={-1} aria-hidden="true" className={horizontal ? '' : 'mb-3 block max-lg:order-2 max-lg:mb-0 max-lg:w-28 max-lg:shrink-0'}>
+        <Link prefetch={false} href={articleHref(a)} tabIndex={-1} aria-hidden="true" className={horizontal ? '' : 'mb-3 block max-lg:order-2 max-lg:mb-0 max-lg:w-32 max-lg:shrink-0'}>
           <Img media={a.cover} lang={a.language} alt={a.cover_alt} ratio={horizontal ? '4/3' : '3/2'} sizes="(min-width: 1024px) 400px, 112px" />
         </Link>
       )}
       <div className={compact ? 'max-lg:min-w-0 max-lg:flex-1' : ''}>
         <Kicker a={a} locale={locale} />
-        <Title a={a} className={`headline-2 ${compact ? 'max-lg:text-[19px] max-lg:leading-snug' : ''}`} />
+        <Title a={a} className={`headline-2 ${compact ? 'max-lg:text-[21px] max-lg:leading-snug' : ''}`} />
         {excerpt && (a.subtitle || a.excerpt) && <p className={`excerpt clamp-3 mt-2 ${compact ? 'max-lg:hidden' : ''}`}>{a.subtitle || a.excerpt}</p>}
         <MetaLine a={a} className="mt-2" />
       </div>
@@ -149,7 +150,7 @@ export function SecondaryStory({ a, locale, image = true, horizontal = false, ex
 export function ListItem({ a, locale, kicker = true, thumb = false, className = '' }: { a: ArticleCard; locale: Lang; kicker?: boolean; thumb?: boolean; className?: string }) {
   return (
     <ItemFrame a={a} locale={locale} as="li" className={`flex gap-3 py-3 ${a.is_sponsored ? 'bg-paper-2 px-2' : ''} ${className}`}>
-      <time dateTime={a.published_at} className="meta w-[4.5rem] shrink-0 pt-1 tabular-nums">
+      <time dateTime={a.published_at} className="meta w-[4.5rem] shrink-0 pt-1 font-semibold text-ink-2 tabular-nums">
         {formatListTime(a.published_at, a.language)}
       </time>
       <div className="min-w-0 flex-1">
@@ -178,7 +179,7 @@ export function HeadlineItem({ a, locale }: { a: ArticleCard; locale: Lang }) {
 export function NumberedItem({ a, locale, n }: { a: ArticleCard; locale: Lang; n: number }) {
   return (
     <ItemFrame a={a} locale={locale} as="li" className="flex items-start gap-3 py-3">
-      <span className="font-headline w-8 shrink-0 text-[32px] leading-none font-semibold text-ink-3" aria-hidden="true">{n}</span>
+      <span className="font-headline w-8 shrink-0 text-[34px] leading-none font-bold text-accent" aria-hidden="true">{n}</span>
       <div className="min-w-0">
         <Title a={a} className="headline-3" />
       </div>
@@ -208,21 +209,18 @@ export function OpinionItem({ a, locale }: { a: ArticleCard; locale: Lang }) {
   );
 }
 
-/** Section header: title, 2px rule with accent notch, optional "more" link at inline-end. */
+/** Section header: title in a block of the section's colour on a rule of that colour, optional "more" link at inline-end. */
 export function SectionHeader({ title, href, moreLabel, color, as: H = 'h2', id }: {
   title: string; href?: string; moreLabel?: string; color?: string; as?: 'h1' | 'h2'; id?: string;
 }) {
   return (
-    <div className="mb-4">
-      <div className="flex items-end justify-between gap-4 pb-2">
-        <H id={id} className="section-title">{href ? <Link prefetch={false} href={href} className="hover:text-accent">{title}</Link> : title}</H>
-        {href && moreLabel && (
-          <Link prefetch={false} href={href} className="meta shrink-0 hover:text-accent">
-            {moreLabel} <span aria-hidden="true" className="inline-block rtl:rotate-0 ltr:-scale-x-100">←</span>
-          </Link>
-        )}
-      </div>
-      <div className="section-rule" style={color ? ({ '--notch': color } as CSSProperties) : undefined} />
+    <div className="section-head mb-4" style={color ? ({ '--sec': color } as CSSProperties) : undefined}>
+      <H id={id} className="section-title">{href ? <Link prefetch={false} href={href}>{title}</Link> : title}</H>
+      {href && moreLabel && (
+        <Link prefetch={false} href={href} className="section-more shrink-0">
+          {moreLabel} <span aria-hidden="true" className="inline-block rtl:rotate-0 ltr:-scale-x-100">←</span>
+        </Link>
+      )}
     </div>
   );
 }
