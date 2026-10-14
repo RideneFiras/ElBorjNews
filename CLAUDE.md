@@ -1,8 +1,8 @@
 # CLAUDE.md
 
-**El Borj (البرج)**: an Arabic-first (RTL) and French online newspaper for Mourad Ridene, a
+**El Borj (البرج)**: an Arabic (RTL) online newspaper (public site Arabic only, admin French only since 2026-10-14) for Mourad Ridene, a
 Tunisian journalist. Public site, admin/CMS, first-party statistics nobody can edit, sponsor
-ads and a live media kit. Built (phases 0–5) and **live** at https://www.elborj.workers.dev
+ads and a live media kit. Built (phases 0–5) and **live** at https://borj.tn (www.borj.tn and www.elborj.workers.dev redirect there)
 (demo content removed 2026-10-02). Owner/developer: Firas (the journalist's son). The editor-in-chief is
 not technical: everything editorial must stay doable from the admin.
 
@@ -61,7 +61,7 @@ Full map: `supabase/MODULE.md`. Essentials:
 
 ## Cloudflare
 
-Account firasuv@gmail.com, subdomain `elborj`, Worker **`www`** → https://www.elborj.workers.dev. R2 bucket `el-borj-opennext-cache` (page cache), D1 `el-borj-tag-cache` (tag cache), SQLite Durable Object queue. Public vars in `wrangler.jsonc`; secrets (`SUPABASE_SERVICE_ROLE_KEY`, `REVALIDATE_SECRET`, `TRACKER_HMAC_SECRET`) via `wrangler secret`. Cache setup and why: `open-next.config.ts`, DECISIONS.md → Deployment. Wrangler is logged in on Firas's machine (`npx wrangler whoami`). Ask before deploying.
+Account firasuv@gmail.com, subdomain `elborj`, Worker **`www`** → https://borj.tn (custom domain; also www.elborj.workers.dev, redirected). R2 bucket `el-borj-opennext-cache` (page cache), D1 `el-borj-tag-cache` (tag cache), SQLite Durable Object queue. Public vars in `wrangler.jsonc`; secrets (`SUPABASE_SERVICE_ROLE_KEY`, `REVALIDATE_SECRET`, `TRACKER_HMAC_SECRET`) via `wrangler secret`. Cache setup and why: `open-next.config.ts`, DECISIONS.md → Deployment. Wrangler is logged in on Firas's machine (`npx wrangler whoami`). Ask before deploying.
 
 ## How to work
 

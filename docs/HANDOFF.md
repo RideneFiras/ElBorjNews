@@ -79,8 +79,8 @@ session continuing the work._
 
 - **https://borj.tn** is the address (`SITE_URL`); `www.borj.tn` and `www.elborj.workers.dev` redirect to it (301). Public site Arabic only (`/fr` → `/ar`), admin French only (`/ar/admin` → `/fr/admin`). Navy masthead, one colour per section, bigger text. Details: DECISIONS.md → "Domain, languages and clearer colours". Deployed version `ce271f27`, 1.69 MiB gzip.
 - Database: section colours set, the 6 Arabic articles saved as `fr` are `ar`, `legal_masthead.email` = contact@borj.tn (footer and contact page).
-- **Firas, Supabase dashboard:** Authentication → URL Configuration: Site URL `https://borj.tn`, redirect URLs `https://borj.tn/**` (password reset and invitations). Optionally `private.app_config.revalidate_url` → `https://borj.tn/api/revalidate` (the workers.dev one keeps working: `/api` isn't redirected).
 - Wrangler's OAuth login can expire: `pnpm run deploy` then waits for a browser sign-in and fails with "Timed out waiting for authorization code". Run `npx wrangler login` first.
+- Phone fix (same day, version `24bf34a1`): the ☰ menu was unreadable (white text inherited from the navy band); now ink on paper with section colours, search and big rows. Small tap targets enlarged. `private.app_config.revalidate_url` is now `https://borj.tn/api/revalidate`; Firas set the Supabase Auth URLs.
 - Facebook kit for the new look: `design/facebook/*-2026.*` (profile, cover, announcement poster; `node design/facebook/render-2026.mjs [phone]`).
 
 ## Next 5 concrete steps (for whoever continues)

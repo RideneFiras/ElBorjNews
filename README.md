@@ -1,33 +1,33 @@
-# El Borj (working name) — online newspaper
+# البرج · El Borj — online newspaper
 
-Arabic-first (RTL) and French online newspaper for Mourad Ridene: public site, admin/CMS,
+Arabic online newspaper (RTL) from Kelibia for Mourad Ridene: public site, admin/CMS (in French),
 first-party statistics that nobody can edit, sponsor ads and a live media kit. Next.js on
-Cloudflare Workers (free plan) + Supabase (free plan).
+Cloudflare Workers + Supabase.
 
-**Live (test address):** https://www.elborj.workers.dev — admin at
-`/ar/admin/login`. The screenshots below show the demo content used during development (removed
-from the live site with `supabase/demo-clear.sql`).
+**Live: https://borj.tn** · admin at https://borj.tn/fr/admin/login · contact@borj.tn
+
+- The newspaper is **Arabic only**; `/fr/*` reader pages redirect to `/ar/*`. The admin is **French only** (`/ar/admin` redirects to `/fr/admin`).
+- `www.borj.tn` and the old test address `www.elborj.workers.dev` redirect to `borj.tn`.
+- Built for older readers on phones: navy masthead, one colour per section (editable in the admin), large text and tap targets.
 
 ## Screenshots
 
-| Homepage (Arabic, desktop) | Accueil (français) |
-|---|---|
-| ![Arabic homepage](docs/screenshots/live/home-ar-1280.png) | ![French homepage](docs/screenshots/live/home-fr-1280.png) |
+Live site, 2026-10-14 (`docs/screenshots/live-2026-10-14/`).
 
-| Homepage (phone) | Article (phone) | Media kit for advertisers |
+| Homepage (desktop) |
+|---|
+| ![Homepage on a computer](docs/screenshots/live-2026-10-14/home-desktop.png) |
+
+| Homepage (phone) | Menu (phone) | Article (phone) |
 |---|---|---|
-| ![Homepage on a phone](docs/screenshots/live/home-ar-390.png) | ![Article on a phone](docs/screenshots/live/article-ar-390.png) | ![Media kit](docs/screenshots/phase5/mediakit-ar-375.png) |
+| ![Homepage on a phone](docs/screenshots/live-2026-10-14/home-phone.png) | ![Sections menu on a phone](docs/screenshots/live-2026-10-14/menu-phone.png) | ![Article on a phone](docs/screenshots/live-2026-10-14/article-phone.png) |
 
 | Article editor (admin) | Statistics (admin, simulated local traffic) |
 |---|---|
 | ![Article editor](docs/screenshots/phase2/editor-ar-1280.png) | ![Statistics](docs/screenshots/phase3/stats-overview-ar-1280.png) |
 
-| Homepage builder | Sponsor report |
-|---|---|
-| ![Homepage builder](docs/screenshots/phase2/homepage-ar-1280.png) | ![Sponsor report](docs/screenshots/phase4/sponsor-report-ar-1280.png) |
-
-Public pages: taken on the live site (2026-10-02). Admin screens: from the build
-(`docs/screenshots/phase*/`, more there), with simulated local readers for the statistics.
+Admin screens are from the build (`docs/screenshots/phase*/`, before the admin became French only).
+Facebook page pictures and the «البرج في حلّة جديدة» poster: `design/facebook/*-2026.*`.
 
 ## Start here
 
@@ -57,7 +57,7 @@ npx supabase start                 # local database; prints the local keys
 cp .env.example .env.local         # put the local URL/keys in it (see docs/HANDOFF.md)
 pnpm db:local-reset                # migrations + seed + demo content + 3 test users
 pnpm dev:traffic                   # optional: 45 days of simulated readers (local only)
-pnpm dev                           # http://localhost:3000  — admin: /ar/admin/login
+pnpm dev                           # http://localhost:3000  — admin: /fr/admin/login
 ```
 
 Test users (local only): `admin@elborj.test`, `editor@elborj.test`, `author@elborj.test`,
@@ -72,20 +72,21 @@ password `local-dev-password`.
 | `pnpm build && pnpm start` then `E2E_NO_SERVER=1 pnpm test:e2e` | Playwright end-to-end tests |
 | `pnpm db:bundle` | Rebuilds `supabase/ALL_MIGRATIONS.sql` from the numbered migrations |
 | `pnpm db:demo` | Regenerates `supabase/demo-seed.sql` |
-| `pnpm build:cf` / `pnpm bundle:size` | Cloudflare build, Worker size check (free plan: 3 MiB gzip) |
-| `pnpm run deploy` | Build without local secrets and deploy (`scripts/deploy.sh`; not `pnpm deploy`, which is a pnpm built-in) |
+| `pnpm build:cf` / `pnpm bundle:size` | Cloudflare build, Worker size check (now 1.69 MiB gzip; limit 3 MiB free / 10 MiB paid) |
+| `pnpm run deploy` | Build without local secrets and deploy (`scripts/deploy.sh`; not `pnpm deploy`, which is a pnpm built-in). If Wrangler's login expired, run `npx wrangler login` first |
+| `node design/facebook/render-2026.mjs [phone]` | Re-render the Facebook pictures and poster (`phone` refreshes the site screenshot in the poster) |
 | `bash scripts/backup.sh` | Database backup (see DEPLOY.md §8) |
 | `bash scripts/lighthouse-median.sh <url>` | Lighthouse mobile, median of 3 runs |
 
 ## Costs
 
-- Cloudflare Workers free plan + Supabase free plan: 0 TND/month. Domain: yearly fee.
+- Cloudflare **Workers Paid** since 2026-10-03: $5/month. Supabase free plan: 0. Domain `borj.tn`: yearly fee.
 
 ## Upgrade path (only when needed)
 
 | Sign | Upgrade | Cost (list prices when written; check before buying) |
 |---|---|---|
-| More than ~100k page requests a day, error 1102 or "Too many subrequests" in the Workers logs | Cloudflare **Workers Paid** (10 million requests/month, 30 s CPU, 10,000 subrequests) — see `docs/WORKERS-PAID.md` | $5/month |
+| ~~More than ~100k page requests a day, error 1102~~ | Cloudflare **Workers Paid**: done 2026-10-03 (`docs/WORKERS-PAID.md`) | $5/month |
 | Database near 500 MB, storage near 1 GB, need real backups or no pausing | **Supabase Pro** (8 GB DB, 100 GB storage, daily backups, no pausing) | $25/month |
 | Login e-mails limited | A free SMTP provider in Supabase Auth (no upgrade needed) | free |
 | Error alerts wanted | Sentry free tier | free |
@@ -94,20 +95,20 @@ Nothing in the code has to change for these upgrades; `docs/WORKERS-PAID.md` lis
 
 ## Things to confirm with your dad (can be changed later in the admin, no code)
 
-- [ ] Name of the paper (working: «البرج» / El Borj; alternatives: «الشّراع», «المنارة»)
-- [ ] Tagline
-- [ ] Section list (seeded with: الوطن القبلي، وطنية، الكرة الطائرة، رياضة، ثقافة، مجتمع، اقتصاد، رأي)
+- [x] Name of the paper: «البرج» / El Borj
+- [x] Domain: borj.tn · contact email: contact@borj.tn
+- [ ] Tagline (now «جريدة إلكترونية مستقلّة»)
+- [ ] Section list and colours (admin → Rubriques)
 - [ ] Is «أبو فراس» still a signature he wants to use? (can be a byline override)
-- [ ] Legal masthead: who is المدير المسؤول and رئيس التحرير, address, contact
+- [ ] Legal masthead: who is المدير المسؤول and رئيس التحرير, address, phone (articles are unsigned until this is settled, DECISIONS.md → "Bylines and names")
 - [ ] Whether the publication needs to be declared anywhere in Tunisia (ask SNJT or a lawyer)
-- [ ] Domain name (check availability of the chosen name in `.tn` and `.com`)
 
 ## What's in `docs/`
 
 | File | Content |
 |---|---|
 | 01-product.md | Vision, positioning, roles, scope |
-| 02-design-system.md | Visual direction from the research, tokens, fonts, components, banned "AI look" patterns |
+| 02-design-system.md | Visual direction from the research, tokens, fonts, components, banned "AI look" patterns (colour rules updated 2026-10-14) |
 | 03-architecture.md | Stack, Cloudflare/OpenNext, i18n, caching, media, auth, security |
 | 04-database.md | Full schema, seed data, RLS, cron jobs, migration deliverables |
 | 05-public-site.md | Every public page |
