@@ -91,7 +91,7 @@ export async function Footer({ locale, settings, categories, menu, pages }: {
                 {legal.map(([k, val]) => (
                   <div key={k} className="contents">
                     <dt className="text-footer-ink-2">{k}</dt>
-                    <dd><bdi>{val}</bdi></dd>
+                    <dd>{val === lm.email ? <a href={`mailto:${val}`} dir="ltr" className="underline underline-offset-4">{val}</a> : <bdi>{val}</bdi>}</dd>
                   </div>
                 ))}
               </dl>
