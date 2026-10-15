@@ -87,7 +87,7 @@ const Spec = z.object({
   byline_override: z.string().trim().max(200).nullish(),
   /** No author name at all (same as «بدون توقيع» in the editor). */
   unsigned: z.boolean().default(false),
-  /** The author's signature line at the end of the source (e.g. «إعداد مراد ريدان»). It becomes the
+  /** The author's signature line at the start or end of the source (e.g. «إعداد مراد ريدان», «كتبت …»). It becomes the
    *  byline (`authors` or `byline_override`), so it is left out of the body; `fidelity` removes it
    *  from the source before comparing. */
   signature: z.string().trim().min(1).nullish(),
@@ -560,8 +560,9 @@ function fidelity(file: string, sourceFile: string) {
   let source = readFileSync(sourceFile, 'utf8');
   if (spec.signature) {
     const at = source.lastIndexOf(spec.signature);
-    if (at < 0 || source.slice(at + spec.signature.length).trim()) fail(`signature not found at the end of the source: «${spec.signature}»`);
-    source = source.slice(0, at);
+    if (source.trimStart().startsWith(spec.signature)) source = source.trimStart().slice(spec.signature.length);
+    else if (at >= 0 && !source.slice(at + spec.signature.length).trim()) source = source.slice(0, at);
+    else fail(`signature not found at the start or end of the source: «${spec.signature}»`);
   }
   for (const c of spec.corrections) {
     if (!source.includes(c.from)) fail(`correction not found in the source: «${c.from}»`);

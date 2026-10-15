@@ -64,7 +64,8 @@ Firas in the summary (step 7): he approves the fixes together with the rest.
    - next line(s) until the first blank line: the title (it can span 2 lines; join them with a space),
      a lone genre word on line 2 (`بورتريه`, `حوار`, `خبر`…) is the genre (`format`), not the title;
      leave it out of `source.txt` too,
-   - the last line may be a signature («إعداد مراد ريدان»): see Byline below,
+   - the last line may be a signature («إعداد مراد ريدان»), or the first line a byline
+     («كتبت لمياء قربوج», then the section on the next line): see Byline below,
    - then the body.
    Anything missing (genre, tags, subtitle, cover choice…) you fill in.
 2. **Text pasted in the chat** plus picture paths (drag a file into the terminal to get its
@@ -89,8 +90,9 @@ If there is no title, ask for one. Don't invent it.
    - `tags`: existing place/club/event tags clearly mentioned (e.g. `nabeul`). Propose new tags
      (`new_tags`) only for clearly important names, and only with Firas's OK.
    - Byline (since 2026-10-14): **if the text ends with a signature line** («إعداد مراد ريدان»,
-     «بقلم …»), that person is the author. Put the exact line in `"signature"` (it is left out of
-     the body; `fidelity` strips it from the end of the source) and set the byline:
+     «بقلم …») **or starts with one** («كتبت …», «كتب …»), that person is the author. Put the
+     exact line in `"signature"` (it is left out of the body; `fidelity` strips it from the start
+     or end of the source) and set the byline:
      - an existing profile (see AUTHORS in `options`) whose name matches → `"authors": ["<slug>"]`;
      - none → `"byline_override": "<the name only>"` (the page prints «بقلم <name>»), and tell
        Firas no profile exists yet: he can create one in the admin (Utilisateurs → inviter) so the
