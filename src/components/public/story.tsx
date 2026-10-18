@@ -149,7 +149,7 @@ export function SecondaryStory({ a, locale, image = true, horizontal = false, ex
 /** List item: fixed-width time column + headline-3 + optional kicker. */
 export function ListItem({ a, locale, kicker = true, thumb = false, className = '' }: { a: ArticleCard; locale: Lang; kicker?: boolean; thumb?: boolean; className?: string }) {
   return (
-    <ItemFrame a={a} locale={locale} as="li" className={`flex gap-3 py-3 ${a.is_sponsored ? 'bg-paper-2 px-2' : ''} ${className}`}>
+    <ItemFrame a={a} locale={locale} as="li" className={`flex gap-3 py-4 ${a.is_sponsored ? 'bg-paper-2 px-2' : ''} ${className}`}>
       <time dateTime={a.published_at} className="meta w-[4.5rem] shrink-0 pt-1 font-semibold text-ink-2 tabular-nums">
         {formatListTime(a.published_at, a.language)}
       </time>
@@ -169,7 +169,7 @@ export function ListItem({ a, locale, kicker = true, thumb = false, className = 
 /** Compact headline without time (side columns, related). */
 export function HeadlineItem({ a, locale }: { a: ArticleCard; locale: Lang }) {
   return (
-    <ItemFrame a={a} locale={locale} as="li" className="py-3">
+    <ItemFrame a={a} locale={locale} as="li" className="py-4">
       <Kicker a={a} locale={locale} />
       <Title a={a} className="headline-3" />
     </ItemFrame>
@@ -178,7 +178,7 @@ export function HeadlineItem({ a, locale }: { a: ArticleCard; locale: Lang }) {
 
 export function NumberedItem({ a, locale, n }: { a: ArticleCard; locale: Lang; n: number }) {
   return (
-    <ItemFrame a={a} locale={locale} as="li" className="flex items-start gap-4 py-3">
+    <ItemFrame a={a} locale={locale} as="li" className="flex items-start gap-4 py-4">
       <span className="num-block shrink-0" aria-hidden="true">{n}</span>
       <div className="min-w-0">
         <Title a={a} className="headline-3" />

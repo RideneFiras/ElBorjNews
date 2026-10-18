@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { CSSProperties } from 'react';
+import { Fragment, type CSSProperties, type ReactElement } from 'react';
 import { getTranslations } from 'next-intl/server';
 import type { Lang } from '@/lib/data/types';
 import type { ResolvedSection } from '@/lib/public/homepage';
@@ -129,7 +129,8 @@ export async function HomeSections({ sections, locale }: { sections: ResolvedSec
   const t = await getTranslations({ locale, namespace: 'common' });
   const tl = await getTranslations({ locale, namespace: 'latest' });
   const ta = await getTranslations({ locale, namespace: 'article' });
-  const out = [];
+  const out: ReactElement[] = [];
+  const bandKeys = new Set<string>();
   // "Upcoming dates" and "most read" are both half-width lists: shown side by side on desktop
   // (at the place of the first one), stacked on phones.
   const agendaIdx = sections.findIndex((x) => x.kind === 'agenda');
@@ -158,9 +159,12 @@ export async function HomeSections({ sections, locale }: { sections: ResolvedSec
         const ag = sections[agendaIdx] as Of<'agenda'>;
         const mr = sections[mostReadIdx] as Of<'most_read'>;
         out.push(
-          <section key={`pair-${ag.id}`} className="container-page mt-12 grid gap-12 lg:grid-cols-2 lg:gap-6">
+          <section key={`pair-${ag.id}`} className="container-page mt-12 grid lg:grid-cols-2 lg:gap-6">
             {agendaCol(ag)}
-            <div className="col-rule">{mostReadCol(mr)}</div>
+            <div className="col-rule">
+              <div className="double-rule my-12 lg:hidden" aria-hidden="true" />
+              {mostReadCol(mr)}
+            </div>
           </section>,
         );
       }
@@ -182,6 +186,7 @@ export async function HomeSections({ sections, locale }: { sections: ResolvedSec
         );
         break;
       case 'category':
+        bandKeys.add(s.id);
         out.push(<CategoryBlock key={s.id} s={s} locale={locale} more={t('more')} />);
         break;
       case 'picks':
@@ -233,8 +238,19 @@ export async function HomeSections({ sections, locale }: { sections: ResolvedSec
         break;
     }
   }
-  // Two "most read" + "opinion" style blocks look fine one after another; nothing else to compose.
-  return <>{out}</>;
+  // A print-style double rule between homepage sections, so each block reads as its own zone.
+  // Coloured section bands already stand apart, so no rule touches one.
+  const banded = (el: (typeof out)[number]) => bandKeys.has(String(el.key));
+  return (
+    <>
+      {out.map((el, i) => (
+        <Fragment key={el.key}>
+          {i > 0 && !banded(el) && !banded(out[i - 1]!) && <div className="container-page mt-12" aria-hidden="true"><div className="double-rule" /></div>}
+          {el}
+        </Fragment>
+      ))}
+    </>
+  );
 }
 
 export function HomeEmpty({ locale }: { locale: Lang }) {
