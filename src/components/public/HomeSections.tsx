@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Fragment, type CSSProperties } from 'react';
+import { Fragment, type CSSProperties, type ReactElement } from 'react';
 import { getTranslations } from 'next-intl/server';
 import type { Lang } from '@/lib/data/types';
 import type { ResolvedSection } from '@/lib/public/homepage';
@@ -129,7 +129,7 @@ export async function HomeSections({ sections, locale }: { sections: ResolvedSec
   const t = await getTranslations({ locale, namespace: 'common' });
   const tl = await getTranslations({ locale, namespace: 'latest' });
   const ta = await getTranslations({ locale, namespace: 'article' });
-  const out = [];
+  const out: ReactElement[] = [];
   const bandKeys = new Set<string>();
   // "Upcoming dates" and "most read" are both half-width lists: shown side by side on desktop
   // (at the place of the first one), stacked on phones.
