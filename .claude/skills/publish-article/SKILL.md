@@ -49,8 +49,8 @@ Firas in the summary (step 7): he approves the fixes together with the rest.
   (a date line in a programme), turn clearly tabular data into a table **with the same cells in
   the same order**, place pictures. Collapsing repeated spaces and trimming line ends is fine.
 - Every visible field you write yourself (subtitle/dek, kicker, captions, calendar titles) goes
-  in `generated` (calendar titles are in `events`) and must be approved by Firas before going
-  live. Alt text is written by you (it describes the picture for blind readers and isn't shown
+  in `generated` (calendar titles are in `events`) and is listed for Firas in the summary (he
+  can change it after it goes live). Alt text is written by you (it describes the picture for blind readers and isn't shown
   on the page). **Captions** (since 2026-10-03): you may write a short factual caption from the
   text (who/what/where, e.g. «جود حمام يتسلّم شهادته بألمانيا») and list `"captions"` in
   `generated`. **Photo credits** only from Firas or the source (never guess a photographer).
@@ -59,6 +59,15 @@ Firas in the summary (step 7): he approves the fixes together with the rest.
 
 ## Input formats
 
+0. **A Word file** (`.docx`) in the folder (since 2026-10-19): when there is one, **it is the
+   text** (it beats `post`/`post.txt`, which may then be missing or just hold the section).
+   Read it with `python3 -I scripts/docx-to-text.py posts/<n>/<file>.docx --marks` (shows bold
+   runs as `**…**` and Word heading styles), and write the plain version to `source.txt`:
+   `python3 -I scripts/docx-to-text.py posts/<n>/<file>.docx > posts/<n>/source.txt`.
+   Paragraphs = Word paragraphs. Keep bold that exists in the docx (as bold runs); a bold first
+   paragraph(s) before the body is usually the title (often split over 2 lines: join them).
+   The section is then given by Firas in the chat («it's علوم») or in `post`. If he names a
+   section that doesn't exist, ask: create it, or use the closest existing one.
 1. **A folder** `posts/<n>/` (git-ignored) with `post.txt` and pictures. Convention used so far:
    - line 1: the section (e.g. `ثقافة`),
    - next line(s) until the first blank line: the title (it can span 2 lines; join them with a space),
@@ -124,8 +133,9 @@ If there is no title, ask for one. Don't invent it.
      hidden until the article is published. For an article saved earlier: add `events` to its
      spec and run `pnpm -s publish:article events posts/<n>/spec.json`. Firas can add/edit any
      entry himself in the admin (الأجندة), including the public holidays.
-   - `status`: **always `draft` in the spec** (Firas, 2026-10-03: "always push to draft on the
-     website"). Going live is a separate step (8). `is_breaking`/`is_featured` only if asked.
+   - `status`: **`published` in the spec** (Firas, 2026-10-19: "always directly publish, don't
+     draft unless I ask"). Use `draft` only when he asks for a draft, `scheduled` (+
+     `scheduled_for`) when he gives a time. `is_breaking`/`is_featured` only if asked.
 4. **Write the spec** to `posts/<n>/spec.json` (or the scratchpad for pasted text), see the
    format below. Write the original text, without the section line, to `posts/<n>/source.txt`
    (byte-for-byte copy of the rest of `post.txt`, e.g. `tail -n +2 post.txt > source.txt`).
@@ -134,24 +144,30 @@ If there is no title, ask for one. Don't invent it.
 6. **Fidelity**: `pnpm -s publish:article fidelity posts/<n>/spec.json posts/<n>/source.txt`.
    It must end with "✓ … word for word". If it lists missing or added words, fix the spec (never
    the source) and run it again.
-7. **Save it on the site as a draft, without asking**: `pnpm -s publish:article publish
-   posts/<n>/spec.json` (status `draft`). It uploads the pictures (WebP 480/960/1600 + original
-   ≤ 2400 px, EXIF removed), inserts the article and its links, writes `posts/<n>/article.json`
-   (so the same post can never be inserted twice) and prints the admin link. A draft is not
-   public. Then **show Firas a summary** with the admin link: title, subtitle (marked "written by
-   Claude"), section(s), genre, tags, byline, cover + where each picture goes, alt texts, the
-   layout choices you made (joined lines, headings, bold labels, tables), the calendar entries
-   (date, time, title, place: "added to the calendar"), the typo fixes
+7. **Publish it directly, without asking** (once check and fidelity pass): `pnpm -s
+   publish:article publish posts/<n>/spec.json` (status `published` in the spec). It uploads the
+   pictures (WebP 480/960/1600 + original ≤ 2400 px, EXIF removed), inserts the article and its
+   links, writes `posts/<n>/article.json` (so the same post can never be inserted twice),
+   refreshes the site's cached pages (`PROD_REVALIDATE_SECRET` in `.env.local`; without it, up
+   to 5 minutes) and prints the admin link and the short public link `/{lang}/article/{id}`.
+   Check the public link answers 200 (`curl -s -o /dev/null -w "%{http_code}" <link>`).
+   If Firas asked for a draft: status `draft`, and later `pnpm -s publish:article status
+   posts/<n>/spec.json published` (or `scheduled 2026-10-05T08:00`, Tunis time).
+8. **Always write the Facebook post** to `posts/<n>/facebook.txt` and show it in the reply.
+   Every article is shared on the El Borj Facebook page. Make it **short, a teaser, not a
+   summary** (Firas, 2026-10-19): one line (two at most) that makes people want to click,
+   the key hook (who/where/when or the surprising thing), not the whole story, then
+   «👇» and the public link on its own line. Facts only from the article; no hashtags.
+   Example: «جرّة فخار وأشعة الشمس لتحلية مياه البحر؟ ناشئة دار الثقافة منزل تميم جرّبوها 👇»
+   then the link.
+   Then **show Firas a summary**: public + admin links, title, subtitle (marked "written by
+   Claude"), section(s), genre, tags, byline, cover + where each picture goes, the layout
+   choices (joined lines, headings, bold, tables), the calendar entries, the typo fixes
    (`corrections`, from → to), any other probable error you noticed and left unchanged, and the
-   fidelity result. **Ask where the pictures come from** (a club's Facebook page, the
-   organiser, our own photo…) so a credit can be added (`credit`, e.g. «صورة: جمعية …» or
-   «المصدر: فيسبوك»): readers trust a paper that credits its pictures. Then ask: publish now,
-   schedule, or leave it as a draft?
-8. **Go live only on Firas's word**: `pnpm -s publish:article status posts/<n>/spec.json published`
-   (or `scheduled 2026-10-05T08:00`, Tunis time). It prints the short public link
-   `/{lang}/article/{id}`; give it to Firas. The script refreshes the site's cached pages
-   (`PROD_REVALIDATE_SECRET` in `.env.local`), so it shows on the homepage at once; without the
-   secret it takes up to 5 minutes. Firas can also press publish in the admin himself.
+   fidelity result. Everything Claude wrote is already live, so say he can change it in the
+   admin or ask you to (`update`). **Ask where the pictures come from** (a club's Facebook page,
+   the organiser, our own photo…) so a credit can be added (`credit`, e.g. «صورة: جمعية …» or
+   «المصدر: فيسبوك»): readers trust a paper that credits its pictures.
 9. If the text, metadata or pictures must change after saving (Firas asks for it): edit the
    spec, run `check` and `fidelity` again, then `pnpm -s publish:article update posts/<n>/spec.json`.
    It rewrites the saved article (text, metadata, tags, sections, pictures re-uploaded) and keeps
@@ -165,7 +181,7 @@ If there is no title, ask for one. Don't invent it.
 ```json
 {
   "language": "ar",
-  "status": "draft",
+  "status": "published",
   "title": "…exactly as written…",
   "subtitle": "…",
   "generated": ["subtitle", "captions"],
@@ -205,7 +221,7 @@ Embeds: YouTube, Facebook, Instagram, X only.
 
 - Change or add words in the title or body, beyond the typo fixes listed in `corrections`
   (fidelity must pass).
-- Make an article public (`status … published`/`scheduled`) without Firas's explicit "publish".
-  Saving it as a draft is always fine.
+- Publish when check or fidelity fails, or when Firas asked for a draft. (Asking for an article
+  with this skill counts as his "publish", since 2026-10-19.)
 - Use demo authors (`demo-*`) or demo tags for real articles.
 - Write statistics tables, or touch other articles.
