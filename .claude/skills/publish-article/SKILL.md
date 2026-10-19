@@ -1,6 +1,6 @@
 ---
 name: publish-article
-description: Publish an article to the El Borj newspaper website from a text (pasted, or a posts/<n>/ folder with post.txt + pictures). Keeps the author's text exactly as written, word for word, and only adds structure (paragraphs, headings, tables, images) and the missing metadata (section, genre, tags, cover, alt text). Use when Firas asks to publish, post, upload or put an article/text/news on the site.
+description: Publish an article to the El Borj newspaper website from a text (pasted, or a posts/<n>/ folder with a post/post.txt file, a Word .docx or a forwarded e-mail .eml, plus pictures). Keeps the author's text exactly as written, word for word, and only adds structure (paragraphs, headings, tables, images) and the missing metadata (section, genre, tags, cover, alt text). Use when Firas asks to publish, post, upload or put an article/text/news on the site.
 ---
 
 # Publish an article on El Borj
