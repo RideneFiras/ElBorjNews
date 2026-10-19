@@ -154,15 +154,17 @@ If there is no title, ask for one. Don't invent it.
    If Firas asked for a draft: status `draft`, and later `pnpm -s publish:article status
    posts/<n>/spec.json published` (or `scheduled 2026-10-05T08:00`, Tunis time).
 8. **Always write the Facebook post** to `posts/<n>/facebook.txt` and show it in the reply.
-   Every article is shared on the El Borj Facebook page. Length (Firas, 2026-10-19): **two or
-   three lines, not a summary and not a bare one-liner**. Line 1 says what happened with the
-   real facts (what, who, where, when) so the post stands on its own; line 2 gives the angle or
-   why it matters, without telling the rest of the story; then «👇» and the public link on its
-   own line. Facts only from the article; no hashtags. Example (article 88):
-   «بدار الثقافة منزل تميم، نجحت التجربة التطبيقية لمشروع "تحلية مياه البحر بالطاقة الشمسية مع
-   توظيف الفخار"، أنجزه ناشئة نادي الإبداع الرقمي بإشراف الأستاذ والباحث أنيس مسعودة.
-   حين تلتقي الثقافة العلمية بتراث الفخار للبحث عن حلول لشحّ المياه 👇» then the link.
+   Every article is shared on the El Borj Facebook page. Length (Firas, 2026-10-19, after a
+   too-short and a too-long try): **one sentence of about 15–20 words** with the core fact
+   (who/what, where; when if it's an announcement), so the post makes sense on its own but
+   doesn't tell the story; then a short hook line ending in «👇» («التفاصيل والصور 👇»,
+   «البرنامج كاملا 👇»…); then the public link on its own line. Facts only from the article;
+   no hashtags, no names of every participant, no commentary. Example (article 88):
+   «بدار الثقافة منزل تميم، ناشئة نادي الإبداع الرقمي ينجحون في تحلية مياه البحر بالطاقة
+   الشمسية والفخار.» / «التفاصيل والصور 👇» / link.
    Too short (rejected): «جرّة فخار وأشعة الشمس لتحلية مياه البحر؟ ناشئة … جرّبوها 👇».
+   Too long (rejected): a first line with the full project title, the club and the supervisor,
+   plus a second line of commentary.
    Then **show Firas a summary**: public + admin links, title, subtitle (marked "written by
    Claude"), section(s), genre, tags, byline, cover + where each picture goes, the layout
    choices (joined lines, headings, bold, tables), the calendar entries, the typo fixes
