@@ -221,3 +221,9 @@ These are legal questions; the site provides the fields and pages, the answers m
 ## Homepage separations (2026-10-18, branch `design/separations`)
 
 - **Double rule between homepage sections** (Firas: "no proper separations between things"). Each block («آخر الأخبار», agenda, most read, picks…) is preceded by the print `.double-rule` with 48px above and below; on phones the agenda and most-read columns get one too. Coloured category bands get no rule: their wash already separates them. Headline lists (latest, side lists, most read) went from 12px to 16px vertical padding per item.
+
+## Browser cache: new articles needed a hard refresh (2026-10-19)
+
+- **Cause.** Next.js sends cached (ISR) pages with `Cache-Control: s-maxage=…, stale-while-revalidate=2592000`. Nothing shared uses s-maxage (no `cf-cache-status`: the Cloudflare CDN doesn't cache these pages), but Chrome honours stale-while-revalidate: with no max-age the saved copy is always stale yet within the 30-day window, so it showed the old homepage and refreshed it in the background. The server cache was already fresh (the publish script revalidates).
+- **Fix.** `custom-worker.ts` is now the Worker entry (`wrangler.jsonc` → `main`; the OpenNext custom-worker pattern). It wraps `.open-next/worker.js` and rewrites that header to `public, max-age=0, must-revalidate` (`src/lib/security/browser-cache.ts`; private/no-store and immutable responses are left alone). Browsers ask the Worker every time; the Worker still answers from its page cache (`x-nextjs-cache: HIT`), so no extra page builds. Static files keep Cloudflare's own header (unchanged).
+- **Client router cache** (`x-nextjs-stale-time: 300`): `experimental.staleTimes.static` lowered from 5 min to 30 s (the minimum), so clicking a link back to the homepage shows a new article soon.

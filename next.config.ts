@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
   // Not using experimental.inlineCss: it inlines the stylesheet into every HTML page AND
   // repeats it as a string in the RSC payload (~115 KB per page, never cached). A normal
   // stylesheet is downloaded once and cached across pages (DECISIONS.md, Phase 5).
+  // Client router cache for prefetched pages: 30 s (the minimum) instead of 5 min, so clicking
+  // a link to the homepage shows a new article soon after it is published (DECISIONS.md).
+  experimental: { staleTimes: { static: 30 } },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders() }];
   },

@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "main": ".open-next/worker.js",
+  // custom-worker.ts wraps .open-next/worker.js (browser Cache-Control for cached pages).
+  "main": "custom-worker.ts",
   "name": "www",
   "compatibility_date": "2026-09-25",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],

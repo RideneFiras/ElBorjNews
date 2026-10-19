@@ -84,6 +84,10 @@ session continuing the work._
 - Default share picture set (Réglages → «Image de partage par défaut», `design/facebook/share-2026.png`): the homepage had no `og:image`, so Facebook used the lead article's photo.
 - Facebook kit for the new look: `design/facebook/*-2026.*` (profile, cover, announcement poster; `node design/facebook/render-2026.mjs [phone]`).
 
+## Browser cache fix (2026-10-19)
+
+New articles needed a hard refresh: browsers kept a saved copy because of Next's `stale-while-revalidate` header. `custom-worker.ts` (Worker entry) now sends browsers `max-age=0, must-revalidate` on cached pages, and the client router cache is 30 s. Details: DECISIONS.md.
+
 ## Next 5 concrete steps (for whoever continues)
 
 1. Firas: Supabase Auth URLs for the live address (above), then log in on https://www.elborj.workers.dev/ar/admin/login.
