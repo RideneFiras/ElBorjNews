@@ -154,12 +154,15 @@ If there is no title, ask for one. Don't invent it.
    If Firas asked for a draft: status `draft`, and later `pnpm -s publish:article status
    posts/<n>/spec.json published` (or `scheduled 2026-10-05T08:00`, Tunis time).
 8. **Always write the Facebook post** to `posts/<n>/facebook.txt` and show it in the reply.
-   Every article is shared on the El Borj Facebook page. Make it **short, a teaser, not a
-   summary** (Firas, 2026-10-19): one line (two at most) that makes people want to click,
-   the key hook (who/where/when or the surprising thing), not the whole story, then
-   «👇» and the public link on its own line. Facts only from the article; no hashtags.
-   Example: «جرّة فخار وأشعة الشمس لتحلية مياه البحر؟ ناشئة دار الثقافة منزل تميم جرّبوها 👇»
-   then the link.
+   Every article is shared on the El Borj Facebook page. Length (Firas, 2026-10-19): **two or
+   three lines, not a summary and not a bare one-liner**. Line 1 says what happened with the
+   real facts (what, who, where, when) so the post stands on its own; line 2 gives the angle or
+   why it matters, without telling the rest of the story; then «👇» and the public link on its
+   own line. Facts only from the article; no hashtags. Example (article 88):
+   «بدار الثقافة منزل تميم، نجحت التجربة التطبيقية لمشروع "تحلية مياه البحر بالطاقة الشمسية مع
+   توظيف الفخار"، أنجزه ناشئة نادي الإبداع الرقمي بإشراف الأستاذ والباحث أنيس مسعودة.
+   حين تلتقي الثقافة العلمية بتراث الفخار للبحث عن حلول لشحّ المياه 👇» then the link.
+   Too short (rejected): «جرّة فخار وأشعة الشمس لتحلية مياه البحر؟ ناشئة … جرّبوها 👇».
    Then **show Firas a summary**: public + admin links, title, subtitle (marked "written by
    Claude"), section(s), genre, tags, byline, cover + where each picture goes, the layout
    choices (joined lines, headings, bold, tables), the calendar entries, the typo fixes
