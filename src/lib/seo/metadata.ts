@@ -5,7 +5,7 @@ import { pick } from '@/lib/data/settings';
 import type { ArticleFull, Lang } from '@/lib/data/types';
 import { largestUrl, shareImage } from '@/lib/public/media';
 import { mediaUrl } from '@/lib/env';
-import { articleHref } from '@/lib/public/links';
+import { articleHref, articleShortHref } from '@/lib/public/links';
 
 export const OG_LOCALE: Record<Lang, string> = { ar: 'ar_TN', fr: 'fr_TN' };
 
@@ -87,7 +87,10 @@ export function articleMetadata(a: ArticleFull, settings: S, translations: { lan
     authors: a.authors.map((p) => ({ name: (a.language === 'fr' ? p.name_fr : null) || p.name_ar })),
     openGraph: {
       type: 'article',
-      url,
+      // The short link, the one we post on Facebook: when og:url names another address,
+      // Facebook scrapes that one separately and a post made before it finishes shows a bare
+      // «borj.tn» card with no picture. Google still gets the slug URL from the canonical tag.
+      url: `${siteUrl()}${articleShortHref(a)}`,
       title,
       description,
       siteName: pick(settings.site_name, a.language),
