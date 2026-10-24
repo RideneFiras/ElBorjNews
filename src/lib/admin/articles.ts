@@ -30,7 +30,6 @@ function validateForPublish(d: z.output<typeof ArticleInput>) {
   if (!d.title) throw new ActionError('err_title', 'title');
   if (!d.category_id) throw new ActionError('err_category', 'category_id');
   if (!d.unsigned && !d.author_ids.length && !d.byline_override) throw new ActionError('err_authors', 'author_ids');
-  if (d.cover_media_id && !d.cover_alt) throw new ActionError('err_alt', 'cover_alt');
   if (d.is_sponsored && !d.sponsor_name) throw new ActionError('err_sponsor', 'sponsor_name');
 }
 
@@ -60,7 +59,8 @@ export async function saveArticle(raw: ArticleInputT, intent: Intent, opts: { sc
       language: d.language, kicker_override: d.kicker_override, title: d.title || (existing?.title ?? '…'), subtitle: d.subtitle,
       body_json: doc, body_html, body_text, location: d.location, format_id: d.format_id ?? null,
       byline_override: d.unsigned ? null : d.byline_override, cover_media_id: d.cover_media_id ?? null, cover_caption: d.cover_caption,
-      cover_credit: d.cover_credit, cover_alt: d.cover_alt, excerpt: d.excerpt, seo_title: d.seo_title,
+      // Picture description is optional (2026-10-24): without one, the title describes the cover.
+      cover_credit: d.cover_credit, cover_alt: d.cover_alt ?? (d.cover_media_id ? d.title || null : null), excerpt: d.excerpt, seo_title: d.seo_title,
       seo_description: d.seo_description, correction_note_ar: d.correction_note_ar, correction_note_fr: d.correction_note_fr,
       allow_ads: d.is_sponsored ? false : d.allow_ads,
     };

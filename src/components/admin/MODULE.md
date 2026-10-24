@@ -12,7 +12,8 @@ Look: white panels, 4 px radius, 1 px borders, no shadows. Hand-written primitiv
 |---|---|
 | Shell | `Sidebar.tsx`, `Dialog.tsx`, `Sortable.tsx`, `RegenerateButton.tsx` (expire all caches) |
 | Auth | `AuthCard.tsx`, `LoginForm.tsx`, `ForgotForm.tsx`, `ResetForm.tsx` |
-| Articles | `ArticlesTable.tsx` (list, bulk actions), `editor/ArticleEditor.tsx` (the editor: autosave every 15 s, local backup, publish/schedule, revisions, preview link, share after publish), `editor/RichText.tsx` (Tiptap, word/Facebook paste cleaning), `editor/nodes.tsx` (pull quote, figure, gallery, embed, read-also) |
+| Articles | `ArticlesTable.tsx` (list, bulk actions), `editor/ArticleEditor.tsx` (the editor: autosave every 15 s, local backup, publish/schedule, revisions, preview link, share after publish), `editor/RichText.tsx` (Tiptap, word/Facebook paste cleaning; `simple` prop = short Word-like toolbar with direct photo upload), `editor/nodes.tsx` (pull quote, figure, gallery, embed, read-also) |
+| Simple publishing | `simple/SimplePublisher.tsx` (`/admin/publier`: section, title, dek, cover upload, `RichText simple`, publish, then link + copy + Facebook) |
 | Media | `MediaLibrary.tsx`, `MediaPicker.tsx`, `FocalPicker.tsx`, `useUpload.ts` (resize to WebP in the browser, signed upload URLs, no Supabase JS in the browser) |
 | Taxonomy & site | `CategoriesManager.tsx`, `TagsManager.tsx`, `EventsManager.tsx` (الأجندة: events, holidays), `FormatsManager.tsx`, `MenusManager.tsx`, `PageEditor.tsx`, `HomepageBuilder.tsx`, `SettingsForm.tsx`, `MediaKitForm.tsx`, `TeamManager.tsx`, `ProfileForm.tsx`, `MessagesList.tsx` |
 | Ads | `ads/SlotsManager.tsx`, `ads/CampaignForm.tsx`, `ads/AdsenseForm.tsx` (AdSense ID + ads.txt) |

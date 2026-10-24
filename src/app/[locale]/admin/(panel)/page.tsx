@@ -42,7 +42,10 @@ export default async function Dashboard({ params }: { params: Promise<{ locale: 
     ]);
     return (
       <div className="space-y-6">
-        <h1 className="a-h1">{t('hello', { name })}</h1>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1 className="a-h1">{t('hello', { name })}</h1>
+          <Link prefetch={false} href={`/${locale}/admin/publier`} className="a-btn a-btn-primary min-h-12 px-6 text-[16px]">{t('publishSimple')}</Link>
+        </div>
         <DashboardStats locale={locale} scope="site" />
         <h2 className="a-h2">{t('queue')}</h2>
         <div className="grid gap-4 xl:grid-cols-3">
@@ -57,7 +60,10 @@ export default async function Dashboard({ params }: { params: Promise<{ locale: 
   const rows = (mine ?? []) as unknown as A[];
   return (
     <div className="space-y-6">
-      <h1 className="a-h1">{t('hello', { name })}</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="a-h1">{t('hello', { name })}</h1>
+        <Link prefetch={false} href={`/${locale}/admin/publier`} className="a-btn a-btn-primary min-h-12 px-6 text-[16px]">{t('publishSimple')}</Link>
+      </div>
       <DashboardStats locale={locale} scope="me" />
       <div className="grid gap-4 xl:grid-cols-2">
         <List title={t('sentBack')} items={rows.filter((a) => a.review_note)} locale={locale} empty={t('nothing')} />

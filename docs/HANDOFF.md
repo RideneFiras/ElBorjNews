@@ -88,6 +88,10 @@ session continuing the work._
 
 New articles needed a hard refresh: browsers kept a saved copy because of Next's `stale-while-revalidate` header. `custom-worker.ts` (Worker entry) now sends browsers `max-age=0, must-revalidate` on cached pages, and the client router cache is 30 s. Details: DECISIONS.md.
 
+## Simple publishing page (2026-10-24)
+
+`/fr/admin/publier` («Publier (simple)», first sidebar item and a big button on the admin home): section, title, optional dek, main photo, Word-like text box (bold, subheading, lists, quote, table, photos). One click publishes and shows the link to copy or share on Facebook. Picture descriptions are now optional everywhere (the title is used). Files: `src/app/[locale]/admin/(simple)/publier/page.tsx`, `src/components/admin/simple/SimplePublisher.tsx`, `RichText.tsx` (`simple` prop). Why: DECISIONS.md.
+
 ## Next 5 concrete steps (for whoever continues)
 
 1. Firas: Supabase Auth URLs for the live address (above), then log in on https://www.elborj.workers.dev/ar/admin/login.

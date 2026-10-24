@@ -13,7 +13,7 @@ app/
   not-found.tsx         global 404
   [locale]/layout.tsx   <html lang dir>, metadata, favicon from settings; notFound() for unknown locales
   [locale]/(public)/    reader site (masthead, footer, tracker, ad slots in layout.tsx)
-  [locale]/admin/       (auth)/ login, forgot, reset · (panel)/ everything else
+  [locale]/admin/       (auth)/ login, forgot, reset · (simple)/publier (simple publishing page, no sidebar) · (panel)/ everything else
   [locale]/rss.xml      feeds
   api/                  see api/MODULE.md
   robots.txt, sitemap.xml, news-sitemap.xml, sitemaps/[file], ads.txt   route handlers

@@ -18,6 +18,7 @@ export function Sidebar({ locale, role, name, reviewCount, unreadMessages }: { l
   const AD: AppRole[] = ['admin'];
   const items: Item[] = [
     { key: 'dashboard', href: b, exact: true },
+    { key: 'simple', href: `${b}/publier` },
     { key: 'articles', href: `${b}/articles`, exact: true },
     { key: 'newArticle', href: `${b}/articles/new` },
     { key: 'review', href: `${b}/articles?status=in_review`, roles: ED, badge: reviewCount },

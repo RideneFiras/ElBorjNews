@@ -11,6 +11,7 @@ import type { AdminMedia } from '@/lib/admin/media';
 import { searchArticlesForLink } from '@/lib/admin/articles';
 import { articleHref } from '@/lib/public/links';
 import { MediaPicker } from '../MediaPicker';
+import { useUpload } from '../useUpload';
 import { Dialog } from '../Dialog';
 import { SearchIcon } from '@/components/shared/icons';
 import { Embed, Figure, Gallery, PullQuote, ReadAlso } from './nodes';
@@ -35,8 +36,10 @@ function mediaToFigure(m: AdminMedia, lang: 'ar' | 'fr') {
   };
 }
 
-export default function RichText({ value, onChange, onBlur, language, placeholder, editable = true }: {
+export default function RichText({ value, onChange, onBlur, language, placeholder, editable = true, simple = false }: {
   value: PMNode | null; onChange: (doc: PMNode) => void; onBlur?: () => void; language: 'ar' | 'fr'; placeholder: string; editable?: boolean;
+  /** Short Word-like toolbar for the simple publishing page (photos come straight from the computer). */
+  simple?: boolean;
 }) {
   const t = useTranslations('admin.editor');
   const [picker, setPicker] = useState<'image' | 'gallery' | null>(null);
@@ -53,7 +56,7 @@ export default function RichText({ value, onChange, onBlur, language, placeholde
     ],
     content: value ?? { type: 'doc', content: [] },
     editorProps: {
-      attributes: { class: 'prose-article admin-prose min-h-[320px] max-w-none outline-none', dir: language === 'fr' ? 'ltr' : 'rtl', lang: language, 'aria-label': t('body'), 'aria-multiline': 'true' },
+      attributes: { class: `prose-article admin-prose ${simple ? 'min-h-[480px]' : 'min-h-[320px]'} max-w-none outline-none`, dir: language === 'fr' ? 'ltr' : 'rtl', lang: language, 'aria-label': t('body'), 'aria-multiline': 'true' },
       transformPastedHTML: cleanPastedHTML,
     },
     // ProseMirror keeps node attrs in null-prototype objects. React can't send those to a server
@@ -72,7 +75,8 @@ export default function RichText({ value, onChange, onBlur, language, placeholde
   if (!editor) return <div className="a-panel min-h-[360px]" />;
   return (
     <div className="a-panel">
-      {editable && <Toolbar editor={editor} t={t} onImage={() => setPicker('image')} onGallery={() => { setGallery([]); setPicker('gallery'); }} onReadAlso={() => setReadAlso(true)} />}
+      {editable && simple && <SimpleToolbar editor={editor} language={language} />}
+      {editable && !simple && <Toolbar editor={editor} t={t} onImage={() => setPicker('image')} onGallery={() => { setGallery([]); setPicker('gallery'); }} onReadAlso={() => setReadAlso(true)} />}
       <div className="px-4 py-3"><EditorContent editor={editor} /></div>
       <MediaPicker open={picker !== null} title={picker === 'gallery' ? `${t('tb_gallery')} (${gallery.length})` : t('tb_image')}
         onClose={() => {
@@ -93,6 +97,53 @@ export default function RichText({ value, onChange, onBlur, language, placeholde
 }
 
 type T = ReturnType<typeof useTranslations<'admin.editor'>>;
+
+/** Only what real articles use: bold, subheading, lists, quote, table, photos. Labels in words, no icons. */
+function SimpleToolbar({ editor, language }: { editor: Editor; language: 'ar' | 'fr' }) {
+  const t = useTranslations('admin.simple');
+  const { upload, progress, error } = useUpload();
+  const btn = (label: string, action: () => void, active = false) => (
+    <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={action} aria-pressed={active}
+      className={`a-btn ${active ? 'a-btn-primary' : ''}`}>{label}</button>
+  );
+  const c = () => editor.chain().focus();
+  const inTable = editor.isActive('table');
+  return (
+    <div className="sticky top-0 z-10 border-b border-rule bg-white p-2" role="toolbar" aria-label={t('toolbar')}>
+      <div className="flex flex-wrap gap-1.5">
+        {btn(t('bold'), () => c().toggleBold().run(), editor.isActive('bold'))}
+        {btn(t('heading'), () => c().toggleHeading({ level: 2 }).run(), editor.isActive('heading', { level: 2 }))}
+        {btn(t('list'), () => c().toggleBulletList().run(), editor.isActive('bulletList'))}
+        {btn(t('numbered'), () => c().toggleOrderedList().run(), editor.isActive('orderedList'))}
+        {btn(t('quote'), () => c().toggleBlockquote().run(), editor.isActive('blockquote'))}
+        {btn(t('table'), () => c().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run())}
+        <label className="a-btn cursor-pointer">
+          {progress ? t('uploading', { done: progress.done, total: progress.total }) : t('photo')}
+          <input type="file" accept="image/*" multiple hidden onChange={async (e) => {
+            const input = e.currentTarget;
+            if (!input.files?.length) return;
+            const media = await upload(input.files);
+            input.value = '';
+            if (media.length === 1) editor.chain().focus().insertFigure(mediaToFigure(media[0]!, language)).run();
+            else if (media.length > 1) editor.chain().focus().insertGallery(media.map((m) => mediaToFigure(m, language))).run();
+          }} />
+        </label>
+        {btn(t('undo'), () => c().undo().run())}
+      </div>
+      {inTable && (
+        <div className="mt-2 flex flex-wrap items-center gap-1.5 border-t border-rule pt-2">
+          <span className="text-[13px] text-ink-3">{t('tableTools')}</span>
+          {btn(t('addRow'), () => c().addRowAfter().run())}
+          {btn(t('addCol'), () => c().addColumnAfter().run())}
+          {btn(t('delRow'), () => c().deleteRow().run())}
+          {btn(t('delCol'), () => c().deleteColumn().run())}
+          <button type="button" className="a-btn a-btn-danger" onMouseDown={(e) => e.preventDefault()} onClick={() => c().deleteTable().run()}>{t('delTable')}</button>
+        </div>
+      )}
+      {error && <p className="a-error" role="alert">{t('uploadError')}</p>}
+    </div>
+  );
+}
 
 function Toolbar({ editor, t, onImage, onGallery, onReadAlso }: { editor: Editor; t: T; onImage: () => void; onGallery: () => void; onReadAlso: () => void }) {
   const btn = (label: string, action: () => void, active = false) => (
