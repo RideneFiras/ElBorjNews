@@ -13,11 +13,14 @@ import { default as handler } from './.open-next/worker.js';
 
 import { browserCacheControl } from './src/lib/security/browser-cache';
 import { serveMedia } from './src/lib/public/media-cache';
+import { recoveryResponse } from './src/lib/public/recovery';
 
 type Fetch = (request: Request, env: unknown, ctx: unknown) => Promise<Response>;
 
 const worker = {
   async fetch(request: Request, env: CloudflareEnv, ctx: unknown): Promise<Response> {
+    const recovery = await recoveryResponse(request, env);
+    if (recovery) return recovery;
     if (new URL(request.url).pathname.startsWith('/media/')) {
       try {
         if (!env.NEXT_INC_CACHE_R2_BUCKET) throw new Error('Missing public media R2 binding');
