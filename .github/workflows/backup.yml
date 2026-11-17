@@ -11,12 +11,24 @@ on:
   schedule:
     - cron: '0 3 * * 0' # Sundays 03:00 UTC (04:00 in Tunis)
   workflow_dispatch:
+    inputs:
+      recovery_backup_run_id:
+        description: Existing encrypted backup run to restore public images from (blank runs a normal backup)
+        required: false
+        default: ''
+        type: string
+      public_media_dirs:
+        description: JSON allowlist of media directories referenced by published articles
+        required: false
+        default: '[]'
+        type: string
 
 permissions:
   contents: read
 
 jobs:
   backup:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.recovery_backup_run_id == '' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -50,4 +62,41 @@ jobs:
           name: ${{ env.NAME }}
           path: ${{ env.NAME }}.tgz.gpg
           retention-days: 90
+          if-no-files-found: error
+
+  recover_public_media:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.recovery_backup_run_id != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download existing encrypted backup
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BACKUP_RUN_ID: ${{ inputs.recovery_backup_run_id }}
+        run: |
+          [[ "$BACKUP_RUN_ID" =~ ^[0-9]+$ ]] || exit 1
+          gh run download "$BACKUP_RUN_ID" --repo "$GITHUB_REPOSITORY" --dir "$RUNNER_TEMP/encrypted-backup"
+      - name: Decrypt inside the ephemeral runner
+        env:
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          test -n "$BACKUP_PASSPHRASE"
+          mapfile -t files < <(find "$RUNNER_TEMP/encrypted-backup" -type f -name '*.tgz.gpg')
+          test "${#files[@]}" -eq 1
+          gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 \
+            --output "$RUNNER_TEMP/public-backup.tgz" --decrypt "${files[0]}" <<< "$BACKUP_PASSPHRASE"
+      - name: Extract only allowlisted public images
+        env:
+          PUBLIC_MEDIA_DIRS: ${{ inputs.public_media_dirs }}
+        run: python scripts/extract-public-media.py "$RUNNER_TEMP/public-backup.tgz" "$RUNNER_TEMP/recovered-public-media"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-media-recovery-${{ github.run_id }}
+          path: ${{ runner.temp }}/recovered-public-media/
+          retention-days: 1
+          compression-level: 0
           if-no-files-found: error
