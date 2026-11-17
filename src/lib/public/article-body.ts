@@ -1,3 +1,5 @@
+import { cachedMediaHtml } from '@/lib/env';
+
 export interface BodyChunk {
   html: string;
   adAfter?: 'in_article_1' | 'in_article_2';
@@ -16,7 +18,7 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
  */
 export function buildBody(html: string | null, opts: { location?: string | null; ads: boolean; afterParagraphs: number[]; minParagraphs: number; coverAfterFirst?: boolean }): BodyChunk[] {
   // Stored HTML was sanitized when saved and passed the database guard (migration 19).
-  const blocks = (html ?? '').split(/\n(?=<)/).filter((b) => b.trim());
+  const blocks = cachedMediaHtml(html ?? '').split(/\n(?=<)/).filter((b) => b.trim());
   const isPara = (b: string) => /^<p[\s>]/.test(b) && !/^<p class="read-also"/.test(b);
   if (opts.location) {
     const i = blocks.findIndex(isPara);

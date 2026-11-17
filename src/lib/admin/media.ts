@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { sessionClient } from '@/lib/supabase/server';
 import { ActionError, assertStaff, check, isEditor, one, run } from '@/lib/auth/staff';
 import { expireTags } from '@/lib/cache/revalidate';
+import { evictMedia } from '@/lib/cache/media';
 
 export interface AdminMedia {
   id: string;
@@ -88,7 +89,10 @@ export async function deleteMedia(id: string) {
     const m = one(await db.from('media').select('*').eq('id', id).single()) as AdminMedia;
     if (!isEditor(staff) && m.uploaded_by !== staff.id) throw new ActionError('not_allowed');
     const paths = Array.from(new Set([m.storage_path, ...Object.values(m.variants ?? {})])).filter((p) => !/^https?:/.test(p));
-    if (paths.length) await db.storage.from('media').remove(paths);
+    if (paths.length) {
+      check(await db.storage.from('media').remove(paths));
+      await evictMedia(paths);
+    }
     check(await db.from('media').delete().eq('id', id));
   });
 }

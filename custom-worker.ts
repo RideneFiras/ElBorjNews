@@ -12,11 +12,21 @@
 import { default as handler } from './.open-next/worker.js';
 
 import { browserCacheControl } from './src/lib/security/browser-cache';
+import { serveMedia } from './src/lib/public/media-cache';
 
 type Fetch = (request: Request, env: unknown, ctx: unknown) => Promise<Response>;
 
 const worker = {
-  async fetch(request: Request, env: unknown, ctx: unknown): Promise<Response> {
+  async fetch(request: Request, env: CloudflareEnv, ctx: unknown): Promise<Response> {
+    if (new URL(request.url).pathname.startsWith('/media/')) {
+      try {
+        if (!env.NEXT_INC_CACHE_R2_BUCKET) throw new Error('Missing public media R2 binding');
+        return await serveMedia(request, env.NEXT_INC_CACHE_R2_BUCKET, env.NEXT_PUBLIC_SUPABASE_URL);
+      } catch (error) {
+        console.error('Public media request failed', { message: error instanceof Error ? error.message : 'unknown' });
+        return new Response(null, { status: 503, headers: { 'Cache-Control': 'no-store' } });
+      }
+    }
     const response = await (handler.fetch as Fetch)(request, env, ctx);
     const value = browserCacheControl(response.headers.get('cache-control'));
     if (!value) return response;
