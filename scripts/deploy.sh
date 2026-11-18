@@ -33,4 +33,5 @@ for key in SUPABASE_SERVICE_ROLE_KEY REVALIDATE_SECRET TRACKER_HMAC_SECRET; do
     exit 1
   fi
 done
-npx opennextjs-cloudflare deploy
+# Preserve dashboard-managed values (for example the Facebook page ID).
+npx opennextjs-cloudflare deploy --keep-vars

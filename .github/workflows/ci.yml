@@ -20,8 +20,10 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
+      - run: pnpm cf-typegen
       - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm test:media-runtime
       - name: Migrations bundle is up to date
         run: pnpm db:bundle && git diff --exit-code supabase/ALL_MIGRATIONS.sql
       - name: Production build (placeholder public env, no secrets needed)
