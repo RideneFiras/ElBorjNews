@@ -23,6 +23,7 @@ jobs:
       - run: pnpm cf-typegen
       - run: pnpm typecheck
       - run: pnpm test
+      - run: python3 -m unittest discover -s tests -p test_extract_public_media.py
       - run: pnpm test:media-runtime
       - name: Migrations bundle is up to date
         run: pnpm db:bundle && git diff --exit-code supabase/ALL_MIGRATIONS.sql

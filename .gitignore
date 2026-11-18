@@ -9,6 +9,7 @@
 .wrangler/
 coverage/
 node_modules/
+__pycache__/
 cloudflare-env.d.ts
 playwright-report/
 supabase/.temp/
